@@ -10,8 +10,8 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private TransactionType type;
-    //private User initiatedBy; // employee/customer
-    private Long userId;
+    //private UserType initiatedBy; // employee/customer
+
    // @OneToOne
    // private User user;
     @OneToOne
