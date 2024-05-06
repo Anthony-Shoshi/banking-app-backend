@@ -24,7 +24,7 @@ public class Account {
 
     @ManyToOne
     @JsonIgnoreProperties({"accounts"})
-   // private User user;
+   // private Customer customer;
 
     @Column(unique = true)
     private String IBAN;
