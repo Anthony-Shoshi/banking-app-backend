@@ -26,7 +26,7 @@ public class AccountService {
                         account.getIBAN(),
                         account.getBalance(),
                         account.getAccountType(),
-                        account.getStatus(),
+                        account.getCustomer().getStatus(),
                         account.getAbsoluteLimit(),
                         account.getDailyLimit())
                       )
