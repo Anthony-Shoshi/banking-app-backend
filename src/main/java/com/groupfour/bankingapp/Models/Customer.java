@@ -36,7 +36,7 @@ public class Customer implements Serializable {
     public Customer(User user, AccountStauts status, int age, Gender gender) {
         this.user = user;
         this.status = status;
-        this.age = age;
+        this.age = age; //CHANGE THIS TO DOB
         this.gender = gender;
     }
 
