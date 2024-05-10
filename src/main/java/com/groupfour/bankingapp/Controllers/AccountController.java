@@ -21,4 +21,5 @@ public class AccountController {
         return  ResponseEntity.status(200).body(accountService.getAllAccountDetails());
     }
 
+
 }
