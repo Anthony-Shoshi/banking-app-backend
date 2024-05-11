@@ -1,5 +1,5 @@
 package com.groupfour.bankingapp.Models;
 
-public enum AccountStauts {
+public enum CustomerStatus {
     PENDING, APPROVED, REJECTED
 }
