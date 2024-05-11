@@ -115,10 +115,8 @@ public class User {
         this.bsn = bsn;
     }
 
-    public UserType getRole() {
-        return role;
-    }
-
+    @ElementCollection(fetch = jakarta.persistence.FetchType.EAGER)
+    private List<Role> roles;
     public void setRole(UserType role) {
         this.role = role;
     }

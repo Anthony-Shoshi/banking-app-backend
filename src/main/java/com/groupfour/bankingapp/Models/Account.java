@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 
 public class Account {
     @Id
