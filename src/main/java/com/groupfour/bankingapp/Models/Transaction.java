@@ -4,60 +4,53 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
+
+@Entity
 public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Enumerated(EnumType.STRING)
     private TransactionType type;
+
+    @Enumerated(EnumType.STRING)
     private UserType initiatedBy; // employee/customer
-    @OneToOne
+
+    @ManyToOne
     private User user;
-    @OneToOne
+
+    @ManyToOne
     private Account fromAccount;
-    @OneToOne
+
+    @ManyToOne
     private Account toAccount;
+
     private Double transferAmount;
+
     private LocalDateTime currentTime;
+
+    @Enumerated(EnumType.STRING)
     private TransactionStatus status;
 
-    // Getters for all fields
-
-    public Long getId() {
-        return id;
+    public Transaction() {
+        // Default constructor required by JPA
     }
 
-    public TransactionType getType() {
-        return type;
+    public Transaction(TransactionType type, UserType initiatedBy, User user, Account fromAccount, Account toAccount, Double transferAmount, LocalDateTime currentTime, TransactionStatus status) {
+        this.type = type;
+        this.initiatedBy = initiatedBy;
+        this.user = user;
+        this.fromAccount = fromAccount;
+        this.toAccount = toAccount;
+        this.transferAmount = transferAmount;
+        this.currentTime = currentTime;
+        this.status = status;
     }
 
-    public UserType getInitiatedBy() {
-        return initiatedBy;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public Account getFromAccount() {
-        return fromAccount;
-    }
-
-    public Account getToAccount() {
-        return toAccount;
-    }
-
-    public Double getTransferAmount() {
-        return transferAmount;
-    }
-
-    public LocalDateTime getCurrentTime() {
-        return currentTime;
-    }
-
-    public TransactionStatus getStatus() {
-        return status;
-    }
-
+    // Getters and setters
 }
-
