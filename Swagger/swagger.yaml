@@ -1,0 +1,652 @@
+openapi: 3.0.0
+servers:
+    # Added by API Auto Mocking Plugin
+    - description: SwaggerHub API Auto Mocking
+      url: https://virtserver.swaggerhub.com/699853_1/BankingAPI/1.0.0
+    - description: SwaggerHub API Auto Mocking
+      url: https://virtserver.swaggerhub.com/MAHBAAN77/bankingApi/1.0.0
+
+info:
+    version: "1.0.0"
+    title: Banking API
+    description: API for managing banking operations, specifically for employee interactions with customer accounts and transactions.
+    contact:
+        email: you@your-company.com
+    license:
+        name: Apache 2.0
+        url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+
+tags:
+    - name: employees
+      description: Endpoints for employee operations on customer accounts and transactions.
+    - name: customers
+      description: customer related apis such as view profile, deposit/withdraw money, view transaction history
+    - name: users
+      description: Endpoints for user management
+
+security:
+    - JWTAuth: []
+
+components:
+    securitySchemes:
+        JWTAuth:
+            type: apiKey
+            in: header
+            name: Authorization
+
+    schemas:
+        CustomerAccount:
+            type: object
+            properties:
+                accountId:
+                    type: string
+                    description: The unique identifier of the customer's account.
+                customerId:
+                    type: string
+                    description: The unique identifier of the customer.
+                accountType:
+                    type: string
+                    description: The type of the account (checking or savings).
+                balance:
+                    type: number
+                    description: The current balance in the account.
+                currency:
+                    type: string
+                    description: The currency of the account (ISO 4217 code).
+                    enum:
+                        - EUR
+            required:
+                - accountId
+                - customerId
+                - accountType
+                - balance
+                - currency
+
+        Transaction:
+            type: object
+            properties:
+                transactionId:
+                    type: string
+                    description: The unique identifier of the transaction.
+                fromAccount:
+                    type: string
+                    description: The account from which the transfer is made.
+                toAccount:
+                    type: string
+                    description: The account to which the transfer is made.
+                amount:
+                    type: number
+                    description: The amount involved in the transaction.
+                timestamp:
+                    type: string
+                    format: date-time
+                    description: The timestamp of the transaction.
+                initiator:
+                    type: string
+                    description: The user (customer or employee) initiating the transfer.
+                currency:
+                    type: string
+                    description: The currency of the transaction (ISO 4217 code).
+                    enum:
+                        - EUR
+            required:
+                - transactionId
+                - fromAccount
+                - toAccount
+                - amount
+                - timestamp
+                - initiator
+                - currency
+
+        User:
+            type: object
+            properties:
+                userId:
+                    type: string
+                    description: The unique identifier of the user.
+                firstName:
+                    type: string
+                    description: The first name of the user.
+                lastName:
+                    type: string
+                    description: The last name of the user.
+                email:
+                    type: string
+                    description: The email address of the user.
+                role:
+                    type: string
+                    description: The role of the user (employee or customer).
+                password:
+                    type: string
+                    description: The password of the user.
+                bsn:
+                    type: string
+                    description: The Burger Service Nummer (BSN) of the user.
+                phoneNumber:
+                    type: string
+                    description: The phone number of the user.
+            required:
+                - userId
+                - firstName
+                - lastName
+                - email
+                - role
+                - password
+                - bsn
+                - phoneNumber
+
+paths:
+    /login:
+        post:
+            tags:
+                - users
+            summary: User login
+            description: Logs in a user and provides an access token for authentication.
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                    format: email
+                                    description: The email address of the user.
+                                password:
+                                    type: string
+                                    description: The password of the user.
+                            required:
+                                - email
+                                - password
+            responses:
+                "200":
+                    description: User logged in successfully.
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    accessToken:
+                                        type: string
+                                        description: The access token for authentication.
+                                    expiresIn:
+                                        type: integer
+                                        description: The expiration time of the access token in seconds.
+                "400":
+                    description: Bad request. Missing or invalid parameters.
+                "401":
+                    description: Unauthorized. Invalid email or password.
+
+    /logout:
+        post:
+            tags:
+                - users
+            summary: User logout
+            description: Logs out a user and invalidates their access token.
+            security:
+                - JWTAuth: []
+            responses:
+                "200":
+                    description: User logged out successfully.
+                "401":
+                    description: Unauthorized. User not authenticated.
+
+    /users:
+        get:
+            tags:
+                - users
+            summary: Retrieve all users
+            description: Retrieves a list of all users in the system.
+            security:
+                - JWTAuth: []
+            responses:
+                "200":
+                    description: A list of users.
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/User"
+        post:
+            tags:
+                - users
+            summary: Create a new user
+            description: Adds a new user to the system.
+            security:
+                - JWTAuth: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/User"
+            responses:
+                "201":
+                    description: User created successfully.
+                "400":
+                    description: Bad request. Missing or invalid parameters.
+                "401":
+                    description: Unauthorized. User not authorized to create a new user.
+
+    /users/{userId}:
+        get:
+            tags:
+                - users
+            summary: Retrieve a user by ID
+            description: Retrieves a user by their unique identifier.
+            security:
+                - JWTAuth: []
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  schema:
+                      type: string
+                  description: The ID of the user to retrieve.
+            responses:
+                "200":
+                    description: User retrieved successfully.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/User"
+                "404":
+                    description: Not found. User with the specified ID does not exist.
+        put:
+            tags:
+                - users
+            summary: Update a user by ID
+            description: Updates a user's information by their unique identifier.
+            security:
+                - JWTAuth: []
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  schema:
+                      type: string
+                  description: The ID of the user to update.
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/User"
+            responses:
+                "200":
+                    description: User updated successfully.
+                "400":
+                    description: Bad request. Missing or invalid parameters.
+                "401":
+                    description: Unauthorized. User not authorized to update user information.
+                "404":
+                    description: Not found. User with the specified ID does not exist.
+        delete:
+            tags:
+                - users
+            summary: Delete a user by ID
+            description: Deletes a user by their unique identifier.
+            security:
+                - JWTAuth: []
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  schema:
+                      type: string
+                  description: The ID of the user to delete.
+            responses:
+                "200":
+                    description: User deleted successfully.
+                "401":
+                    description: Unauthorized. User not authorized to delete users.
+                "404":
+                    description: Not found. User with the specified ID does not exist.
+                "500":
+                    description: Internal server error. Failed to delete user.
+
+    /employees/customer-accounts:
+        get:
+            tags:
+                - employees
+            summary: View all customer accounts
+            description: Retrieves a list of all customer accounts in the system.
+            security:
+                - JWTAuth: []
+            responses:
+                "200":
+                    description: A list of customer accounts.
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/CustomerAccount"
+
+    /employees/customer-transactions/{customerId}:
+        get:
+            tags:
+                - employees
+            summary: View transactions of a customer
+            description: Retrieves a list of transactions for a specific customer.
+            security:
+                - JWTAuth: []
+            parameters:
+                - in: path
+                  name: customerId
+                  required: true
+                  schema:
+                      type: string
+                  description: The ID of the customer.
+            responses:
+                "200":
+                    description: A list of transactions for the customer.
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/Transaction"
+
+    /employees/transfer-funds:
+        post:
+            tags:
+                - employees
+            summary: Transfer funds between customer accounts
+            description: Transfers funds between two customer accounts.
+            security:
+                - JWTAuth: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                fromAccount:
+                                    type: string
+                                    description: The ID of the source account.
+                                toAccount:
+                                    type: string
+                                    description: The ID of the destination account.
+                                amount:
+                                    type: number
+                                    description: The amount to transfer.
+                            required:
+                                - fromAccount
+                                - toAccount
+                                - amount
+            responses:
+                "200":
+                    description: Funds transferred successfully.
+                "400":
+                    description: Bad request. Missing or invalid parameters.
+                "500":
+                    description: Internal server error. Failed to transfer funds.
+
+    /employees/customers-without-accounts:
+        get:
+            tags:
+                - employees
+            summary: View customers without accounts
+            description: Retrieves a list of customers who do not yet have accounts.
+            security:
+                - JWTAuth: []
+            responses:
+                "200":
+                    description: A list of customers without accounts.
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/CustomerAccount" # Adjust schema if necessary
+
+    /employees/approve-signup:
+        post:
+            tags:
+                - employees
+            summary: Approve customer's signup and create accounts
+            description: Approves a customer's signup and creates checking and savings accounts.
+            security:
+                - JWTAuth: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                customerId:
+                                    type: string
+                                    description: The ID of the customer.
+                            required:
+                                - customerId
+            responses:
+                "200":
+                    description: Customer signup approved and accounts created successfully.
+                "400":
+                    description: Bad request. Missing or invalid parameters.
+                "500":
+                    description: Internal server error. Failed to approve signup and create accounts.
+
+    /employees/close-account:
+        post:
+            tags:
+                - employees
+            summary: Close customer account
+            description: Closes a customer's account.
+            security:
+                - JWTAuth: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                accountId:
+                                    type: string
+                                    description: The ID of the account to be closed.
+                            required:
+                                - accountId
+            responses:
+                "200":
+                    description: Account closed successfully.
+                "400":
+                    description: Bad request. Missing or invalid parameters.
+                "500":
+                    description: Internal server error. Failed to close account.
+
+    /employees/set-absolute-limit:
+        patch:
+            tags:
+                - employees
+            summary: Set an absolute transfer limit on a customer's account
+            description: Allows an employee to set an absolute transfer limit for a customer's account.
+            security:
+                - JWTAuth: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                accountId:
+                                    type: string
+                                    description: The ID of the account to set the limit on.
+                                absoluteLimit:
+                                    type: number
+                                    description: The absolute transfer limit to set on the account.
+                            required:
+                                - accountId
+                                - absoluteLimit
+            responses:
+                "200":
+                    description: Absolute transfer limit set successfully.
+                "400":
+                    description: Bad request. Missing or invalid parameters.
+                "404":
+                    description: Not found. Account not found.
+                "500":
+                    description: Internal server error. Failed to set the limit.
+
+    /employees/set-daily-limit:
+        patch:
+            tags:
+                - employees
+            summary: Set a daily transfer limit on a customer's account
+            description: Allows an employee to set a daily transfer limit for a customer's account.
+            security:
+                - JWTAuth: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                accountId:
+                                    type: string
+                                    description: The ID of the account to set the limit on.
+                                dailyLimit:
+                                    type: number
+                                    description: The daily transfer limit to set on the account.
+                            required:
+                                - accountId
+                                - dailyLimit
+            responses:
+                "200":
+                    description: Daily transfer limit set successfully.
+                "400":
+                    description: Bad request. Missing or invalid parameters.
+                "404":
+                    description: Not found. Account not found.
+                "500":
+                    description: Internal server error. Failed to set the limit.
+
+    /employees/transactions:
+        get:
+            tags:
+                - employees
+            summary: View all transactions across all customer accounts
+            description: Retrieves a list of all transactions across all customers, which can be filtered by various parameters.
+            security:
+                - JWTAuth: []
+            parameters:
+                - in: query
+                  name: from_date
+                  schema:
+                      type: string
+                      format: date
+                  description: Start date to filter transactions.
+                - in: query
+                  name: to_date
+                  schema:
+                      type: string
+                      format: date
+                  description: End date to filter transactions.
+                - in: query
+                  name: from_account
+                  schema:
+                      type: string
+                  description: Filter transactions from a specific account ID.
+                - in: query
+                  name: to_account
+                  schema:
+                      type: string
+                  description: Filter transactions to a specific account ID.
+            responses:
+                "200":
+                    description: A list of all transactions.
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/Transaction"
+                "400":
+                    description: Bad request. Missing or invalid query parameters.
+                "500":
+                    description: Internal server error. Failed to retrieve transactions.
+
+    /employees/accounts/{accountId}/status:
+        patch:
+            tags:
+                - employees
+            summary: Update account status
+            description: Allows an employee to update the status of a specific account.
+            security:
+                - JWTAuth: []
+            parameters:
+                - in: path
+                  name: accountId
+                  required: true
+                  schema:
+                      type: string
+                  description: The ID of the account whose status is to be updated.
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                status:
+                                    type: string
+                                    description: The new status of the account.
+                                    enum:
+                                        - active
+                                        - suspended
+                                        - closed
+                            required:
+                                - status
+            responses:
+                "200":
+                    description: Account status updated successfully.
+                "400":
+                    description: Bad request. Missing or invalid parameters.
+                "404":
+                    description: Not found. Account not found.
+                "500":
+                    description: Internal server error. Failed to update account status.
+
+    /signup/customer:
+        post:
+            tags:
+                - customers
+            summary: Customer Signup
+            description: Endpoint to allow customers to sign up
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                firstName:
+                                    type: string
+                                lastName:
+                                    type: string
+                                email:
+                                    type: string
+                                password:
+                                    type: string
+                                bsn:
+                                    type: string
+                                phoneNumber:
+                                    type: string
+                                age:
+                                    type: integer
+                                gender:
+                                    type: string
+            responses:
+                "200":
+                    description: Successful signup
+                "400":
+                    description: Bad request - validation error or missing fields
+                "409":
+                    description: Conflict - email already exists
