@@ -1,6 +1,6 @@
 package com.groupfour.bankingapp.Services;
 
-import com.groupfour.bankingapp.Models.Transaction;
+import com.groupfour.bankingapp.Models.BankTransaction;
 import com.groupfour.bankingapp.Repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ public class TransactionService {
 
     }
 
-    public List<Transaction> getAllTransactions() {
+    public List<BankTransaction> getAllTransactions() {
         return transactionRepository.findAll();
     }
 

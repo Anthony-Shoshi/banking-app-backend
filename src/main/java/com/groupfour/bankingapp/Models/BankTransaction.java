@@ -4,12 +4,8 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
-
 @Entity
-public class Transaction {
+public class BankTransaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,19 +25,21 @@ public class Transaction {
 
     @ManyToOne
     private Account toAccount;
-
+    @Column
     private Double transferAmount;
 
+    @Column(name = "transaction_time")
     private LocalDateTime currentTime;
+
 
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;
 
-    public Transaction() {
+    public BankTransaction() {
         // Default constructor required by JPA
     }
 
-    public Transaction(TransactionType type, UserType initiatedBy, User user, Account fromAccount, Account toAccount, Double transferAmount, LocalDateTime currentTime, TransactionStatus status) {
+    public BankTransaction(TransactionType type, UserType initiatedBy, User user, Account fromAccount, Account toAccount, Double transferAmount, LocalDateTime currentTime, TransactionStatus status) {
         this.type = type;
         this.initiatedBy = initiatedBy;
         this.user = user;

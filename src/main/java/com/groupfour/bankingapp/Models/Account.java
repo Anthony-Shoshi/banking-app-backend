@@ -37,8 +37,10 @@ public class Account {
     private AccountStatus status;
     private String currency;
 
-    public Account(Long accountId, Customer customer, String IBAN, Double balance, Double absoluteLimit, AccountType accountType, Boolean isActive, Double dailyLimit, AccountStatus status, String currency) {
-        this.accountId = accountId;
+    public Account(
+            //Long accountId,
+                   Customer customer, String IBAN, Double balance, Double absoluteLimit, AccountType accountType, Boolean isActive, Double dailyLimit, AccountStatus status, String currency) {
+      //  this.accountId = accountId;
         this.customer = customer;
         this.IBAN = IBAN;
         this.balance = balance;
@@ -49,6 +51,7 @@ public class Account {
         this.status = status;
         this.currency = currency;
     }
+
 
 
 }
