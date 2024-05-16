@@ -65,7 +65,7 @@ public class ApplicationStarter implements ApplicationRunner {
         }
 
         // Retrieve and print all transactions from the database
-      //  List<BankTransaction> allBankTransactions = transactionService.getAllTransactions();
+       List<BankTransaction> allBankTransactions = transactionService.getAllTransactions();
        // allBankTransactions.forEach(bankTransaction -> System.out.println("BankTransaction ID: " ));
     }
 }

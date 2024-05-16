@@ -14,10 +14,9 @@ import java.util.Map;
 
 @RestController
 @ControllerAdvice
-//@CrossOrigin("*")
 @Log
-@RequestMapping("/transactions")
-//@CrossOrigin(origins = "http://localhost:5173") // Adjust the origin to match your frontend URL
+//@RequestMapping("/transactions")
+
 public class TransactionController {
 
     private final TransactionService transactionService;
@@ -34,7 +33,7 @@ public class TransactionController {
                 .body(response);
     }
 
-    @GetMapping//("/transactions")
+    @GetMapping("/transactions")
     public ResponseEntity<List<BankTransaction>> getAllTransactions() {
         List<BankTransaction> transactions = transactionService.getAllTransactions();
         if (transactions.isEmpty()) {
@@ -43,6 +42,4 @@ public class TransactionController {
             return ResponseEntity.ok(transactions);
         }
     }
-
-
 }

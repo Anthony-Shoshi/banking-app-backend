@@ -11,7 +11,6 @@ import java.util.List;
 @Repository
 public interface TransactionRepository extends JpaRepository<BankTransaction, Long> {
 
-    // You can remove this method if you're not using it
     List<BankTransaction> findAll(Specification<BankTransaction> specification, Pageable pageable);
 }
 
