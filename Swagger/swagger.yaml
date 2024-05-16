@@ -348,7 +348,7 @@ paths:
                             schema:
                                 type: array
                                 items:
-                                    $ref: "#/components/schemas/Transaction"
+                                    $ref: "#/components/schemas/BankTransaction"
 
     /employees/transfer-funds:
         post:
@@ -567,7 +567,7 @@ paths:
                             schema:
                                 type: array
                                 items:
-                                    $ref: "#/components/schemas/Transaction"
+                                    $ref: "#/components/schemas/BankTransaction"
                 "400":
                     description: Bad request. Missing or invalid query parameters.
                 "500":
