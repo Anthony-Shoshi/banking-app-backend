@@ -77,10 +77,6 @@ public class Account {
         return currency;
     }
 
-    public Account(
-            //Long accountId,
-                   Customer customer, String IBAN, Double balance, Double absoluteLimit, AccountType accountType, Boolean isActive, Double dailyLimit, AccountStatus status, String currency) {
-      //  this.accountId = accountId;
     public Account( Customer customer, String IBAN, Double balance, Double absoluteLimit, AccountType accountType, Boolean isActive, Double dailyLimit, AccountStatus status, String currency) {
         this.customer = customer;
         this.IBAN = IBAN;
