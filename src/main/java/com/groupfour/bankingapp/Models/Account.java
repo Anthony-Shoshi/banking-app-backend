@@ -37,6 +37,46 @@ public class Account {
     private AccountStatus status;
     private String currency;
 
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public String getIBAN() {
+        return IBAN;
+    }
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public Double getAbsoluteLimit() {
+        return absoluteLimit;
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public Double getDailyLimit() {
+        return dailyLimit;
+    }
+
+    public AccountStatus getStatus() {
+        return status;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
     public Account(
             //Long accountId,
                    Customer customer, String IBAN, Double balance, Double absoluteLimit, AccountType accountType, Boolean isActive, Double dailyLimit, AccountStatus status, String currency) {

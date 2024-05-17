@@ -6,7 +6,7 @@ import com.groupfour.bankingapp.Models.UserType;
 
 import java.time.LocalDateTime;
 
-public record BankTransactionDTO(Long id, TransactionType type, UserType initiatedBy, Long userId,
-                                 Long fromAccountId, Long toAccountId, Double transferAmount,
-                                 LocalDateTime currentTime, TransactionStatus status) {
+public record BankTransactionDTO(TransactionType type, UserType initiatedBy, String firstName,String lastName,
+                                 String fromAccountIban, String toAccountIban, Double transferAmount,
+                                String currentTime, TransactionStatus status) {
 }

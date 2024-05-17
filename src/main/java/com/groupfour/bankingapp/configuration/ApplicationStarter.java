@@ -1,6 +1,7 @@
 package com.groupfour.bankingapp.configuration;
 
 import com.groupfour.bankingapp.Models.*;
+import com.groupfour.bankingapp.Models.DTO.BankTransactionDTO;
 import com.groupfour.bankingapp.Repository.AccountRepository;
 import com.groupfour.bankingapp.Repository.CustomerRepository;
 import com.groupfour.bankingapp.Repository.TransactionRepository;
@@ -37,7 +38,7 @@ public class ApplicationStarter implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
 
 
-        User user3 = new User("user3@gmail.com","123", "user","UserFather", "09220029", "fsgdgssgr", UserType.ROLE_USER );
+        User user3 = new User("mahbaan77@gmail.com","123", "Fateme","Sabagh", "09220029", "fsgdgssgr", UserType.CUSTOMER );
         Customer customer3= new Customer(user3, CustomerStatus.APPROVED, 19, Gender.MALE);
         //Customer customer4= new Customer(user3, CustomerStatus.APPROVED, 19, Gender.MALE);
         Account Account3 = new Account(customer3, "DE89 3704 0044 0532 0130 12", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
@@ -51,7 +52,7 @@ public class ApplicationStarter implements ApplicationRunner {
         if (user3 != null) {
             BankTransaction t = new BankTransaction(
                     TransactionType.DEPOSIT,
-                    UserType.ROLE_CUSTOMER,
+                    UserType.CUSTOMER,
                     user3,
                     Account3,
                     Account4,
@@ -64,8 +65,7 @@ public class ApplicationStarter implements ApplicationRunner {
             System.out.println("User not found with ID: 1234");
         }
 
-        // Retrieve and print all transactions from the database
-       List<BankTransaction> allBankTransactions = transactionService.getAllTransactions();
+       List<BankTransactionDTO> allBankTransactions = transactionService.getAllTransactions();
        // allBankTransactions.forEach(bankTransaction -> System.out.println("BankTransaction ID: " ));
     }
 }
