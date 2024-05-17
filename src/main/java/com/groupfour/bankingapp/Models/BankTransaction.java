@@ -5,12 +5,12 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "BANK_TRANSACTION")
 public class BankTransaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Enumerated(EnumType.STRING)
     private TransactionType type;
 
@@ -49,6 +49,40 @@ public class BankTransaction {
         this.currentTime = currentTime;
         this.status = status;
     }
+    public Long getId() {
+        return id;
+    }
 
-    // Getters and setters
+    public TransactionType getType() {
+        return type;
+    }
+
+    public UserType getInitiatedBy() {
+        return initiatedBy;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Account getFromAccount() {
+        return fromAccount;
+    }
+
+    public Account getToAccount() {
+        return toAccount;
+    }
+
+    public Double getTransferAmount() {
+        return transferAmount;
+    }
+
+    public LocalDateTime getCurrentTime() {
+        return currentTime;
+    }
+
+    public TransactionStatus getStatus() {
+        return status;
+    }
+
 }

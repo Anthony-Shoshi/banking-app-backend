@@ -9,20 +9,18 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://example.com", "https://example.com")
+                .allowedOrigins("http://localhost:5173", "http://example.com", "https://example.com")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("*")
                 .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
                 .allowCredentials(true);
 
-        // Allow unrestricted access for the /transactions endpoint
+        // Specific mapping for /transactions endpoint
         registry.addMapping("/transactions")
-                .allowedOrigins("*") // Update with your specific allowed origins if needed
+                .allowedOrigins("http://localhost:5173") // Allow specific origin
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("*")
-                .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
+                .exposedHeaders("Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization")
                 .allowCredentials(true);
     }
 }
-
-

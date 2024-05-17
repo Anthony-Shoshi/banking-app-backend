@@ -8,16 +8,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.AuthenticationException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+
 @RestController
 @ControllerAdvice
-//@CrossOrigin("*")
 @Log
-@RequestMapping("/transactions")
-//@CrossOrigin(origins = "http://localhost:5173") // Adjust the origin to match your frontend URL
 public class TransactionController {
 
     private final TransactionService transactionService;
@@ -34,15 +33,17 @@ public class TransactionController {
                 .body(response);
     }
 
-    @GetMapping//("/transactions")
-    public ResponseEntity<List<BankTransaction>> getAllTransactions() {
-        List<BankTransaction> transactions = transactionService.getAllTransactions();
-        if (transactions.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(transactions);
+    @GetMapping("/transactions")
+    public ResponseEntity<Object> getAllTransactions() {
+
+        try{
+            return ResponseEntity.status(200).body(transactionService.getAllTransactions());
+
         }
+        catch (Exception exception) {
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
     }
-
-
 }

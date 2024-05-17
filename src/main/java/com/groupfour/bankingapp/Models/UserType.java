@@ -1,9 +1,8 @@
 package com.groupfour.bankingapp.Models;
 
 public enum UserType {
-    ROLE_CUSTOMER,
+    CUSTOMER,
     ROLE_EMPLOYEE,
     ROLE_USER;
-
 
 }
