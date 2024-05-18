@@ -24,7 +24,6 @@ public class CustomerService {
 
     public void approveSignup(long customerId, ApproveSignupPutDTO approveSignupPutDTO)throws EntityNotFoundException{
         Customer customer= customerRepository.findById(customerId).orElseThrow(() -> new EntityNotFoundException("Customer not found with this id:" + customerId));
-
         customer.setStatus(CustomerStatus.APPROVED);
         accountService.createAccount(customer, approveSignupPutDTO);
         customerRepository.save(customer);
