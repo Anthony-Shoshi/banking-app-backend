@@ -36,14 +36,18 @@ public class DatabaseIntiator implements ApplicationRunner {
         this.initiator();
     }
     private void initiator(){
-        User user1 = new User("user@gmail.com", bCryptPasswordEncoder.encode("123"), "user","UserFather", "09220029", "fsgdgssgr", UserType.ROLE_USER );
-        Customer customer1= new Customer(user1, CustomerStatus.APPROVED, 19, Gender.MALE);
+        User user1 = new User("user@gmail.com", bCryptPasswordEncoder.encode("123"), "Ador","Negash", "09220029", "fsgdgssgr", UserType.ROLE_USER ,"11-11-2000");
+        Customer customer1= new Customer(user1, CustomerStatus.APPROVED, Gender.MALE);
+        Customer customer2= new Customer(user1, CustomerStatus.PENDING, Gender.MALE);
 
         Account Account1 = new Account(customer1, "DE89 3704 0044 0532 0130 12", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
         Account Account2 = new Account(customer1, "DE89 3704 0044 0532 0130 00", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
+
+
         Transaction tarns1 = new Transaction(TransactionType.DEPOSIT, UserType.ROLE_USER, customer1, Account1, Account2, 25.00, LocalDateTime.now(), TransactionStatus.SUCCESS, TransactionType.DEPOSIT );
         userRepository.save(user1);
         customerRepository.save(customer1);
+        customerRepository.save(customer2);
         accountRepository.save(Account1);
         accountRepository.save(Account2);
         transactionRepository.save(tarns1);

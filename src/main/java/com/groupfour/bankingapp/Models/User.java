@@ -44,11 +44,13 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserType role; // Role is either employee or customer
 
+    private String birthDate;
+
     // Default constructor
     public User() {}
 
     // Parameterized constructor
-    public User(String email, String password, String firstName, String lastName, String phoneNumber, String bsn, UserType role) {
+    public User(String email, String password, String firstName, String lastName, String phoneNumber, String bsn, UserType role, String birthDate) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -56,6 +58,7 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.bsn = bsn;
         this.role = role;
+        this.birthDate=birthDate;
     }
 
     // Getters and setters
@@ -121,5 +124,17 @@ public class User {
 
     public void setRole(UserType role) {
         this.role = role;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 }

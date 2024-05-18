@@ -18,8 +18,7 @@ public class Customer implements Serializable {
     @Enumerated(EnumType.STRING)
     private CustomerStatus status;  // Enum for status (PENDING, APPROVED, REJECTED)
 
-    @Column(nullable = false)
-    private int age;
+
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -33,10 +32,9 @@ public class Customer implements Serializable {
     public Customer() {}
 
     // Constructor with all fields
-    public Customer(User user, CustomerStatus status, int age, Gender gender) {
+    public Customer(User user, CustomerStatus status, Gender gender) {
         this.user = user;
         this.status = status;
-        this.age = age;
         this.gender = gender;
     }
 
@@ -55,14 +53,6 @@ public class Customer implements Serializable {
 
     public void setStatus(CustomerStatus status) {
         this.status = status;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
     }
 
     public Gender getGender() {
