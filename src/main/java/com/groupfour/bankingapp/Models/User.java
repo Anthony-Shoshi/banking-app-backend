@@ -38,7 +38,7 @@ public class User {
     private String phoneNumber;
 
     // BSN is typically unique, so we ensure uniqueness here as well
-    @Column(unique = true)
+   // @Column(unique = true)
     private String bsn;
 
     @Enumerated(EnumType.STRING)

@@ -20,21 +20,30 @@ import java.util.List;
 @Service
 public class UserService {
 
+
     private UserRepository userRepository;
     private CustomerRepository customerRepository;
     private BCryptPasswordEncoder passwordEncoder;
     private JwtTokenProvider jwtTokenProvider;
+
+
+    public UserService(UserRepository userRepository, CustomerRepository customerRepository, BCryptPasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider) {
+        this.userRepository = userRepository;
+        this.customerRepository = customerRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
     public LoginResponseDTO login(LoginRequestDTO loginRequest) throws AuthenticationException {
         User user = userRepository.findByEmail(loginRequest.email());
         if (user != null && passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
 
-            Customer customer = customerRepository.findByUserUserId(user.getUserId());
+             Customer customer = customerRepository.findByUserUserId(user.getUserId());
 
-            if (customer == null) {
-                throw new AuthenticationException("Customer record not found for user.");
-            }
-            boolean isApproved = customer.getStatus() == CustomerStatus.APPROVED;
-            return new LoginResponseDTO(user.getEmail(), jwtTokenProvider.createToken(user.getUserId(), user.getRole(),isApproved ));
+//            if (customer == null) {
+//                throw new AuthenticationException("Customer record not found for user.");
+//            }
+             boolean isApproved = customer.getStatus() == CustomerStatus.APPROVED;
+            return new LoginResponseDTO(user.getEmail(), jwtTokenProvider.createToken(user.getUserId(), user.getRole(), isApproved));
         } else {
             throw new AuthenticationException("Invalid credentials");
         }
