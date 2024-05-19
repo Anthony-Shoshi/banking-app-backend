@@ -5,4 +5,8 @@ public enum UserType {
     ROLE_EMPLOYEE,
     ROLE_USER;
 
+    public String getAuthority() {
+        return name();
+    }
+
 }

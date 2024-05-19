@@ -18,11 +18,11 @@ public class UserService {
 
     private UserRepository userRepository;
     private BCryptPasswordEncoder passwordEncoder;
-    private JwtProvider jwtProvider;
+    private com.BankingAPI.BankingAPI.Group1.util.JwtTokenProvider jwtTokenProvider;
     public LoginResponseDTO login(LoginRequestDTO loginRequest) throws AuthenticationException {
         User user = userRepository.findByUsername(loginRequest.email());
         if (user != null && passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
-            return new LoginResponseDTO(user.getEmail(), jwtProvider.createToken(user.getEmail(), user.getRoles()));
+            return new LoginResponseDTO(user.getEmail(), jwtTokenProvider.createToken(user.getUserId(), user.getRole(), ), ));
         } else {
             throw new AuthenticationException("Invalid credentials");
         }

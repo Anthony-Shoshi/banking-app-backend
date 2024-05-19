@@ -4,12 +4,13 @@ import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
-import java.security.KeyStore;
-import java.security.PublicKey;
+import java.io.IOException;
+import java.security.*;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
 
 @Component
 @Getter
@@ -19,28 +20,22 @@ public class JwtKeyProvider {
     private String keystore;
 
     @Value("${jwt.key-store-password}")
-    private String keystorePassword;
+    private String password;
 
     @Value("${jwt.key-alias}")
-    private String keyAlias;
+    private String alias;
 
     private Key privateKey;
 
-    private PublicKey publicKey;
-
     @PostConstruct
-    protected void init() {
-        // Generate a key pair
-        try {
-            ClassPathResource resource = new ClassPathResource(keystore);
-            KeyStore keyStore = KeyStore.getInstance("PKCS12");
-            keyStore.load(resource.getInputStream(), keystorePassword.toCharArray());
-            privateKey = keyStore.getKey(keyAlias, keystorePassword.toCharArray());
-            Certificate certificate = keyStore.getCertificate(keyAlias);
-            publicKey = certificate.getPublicKey();
+    protected void init() throws KeyStoreException, IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException {
+        Resource resource = new ClassPathResource(keystore);
+        KeyStore keyStore = KeyStore.getInstance("PKCS12");
+        keyStore.load(resource.getInputStream(), password.toCharArray());
+        privateKey = keyStore.getKey(alias, password.toCharArray());
+    }
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public Key getPrivateKey() {
+        return privateKey;
     }
 }
