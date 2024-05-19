@@ -26,7 +26,7 @@ public class Customer implements Serializable {
     private Gender gender;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user; // Link to the User entity
 
     // Default constructor

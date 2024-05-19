@@ -10,4 +10,6 @@ import java.util.List;
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     @Query("SELECT c FROM Customer c WHERE c.status = 'PENDING' AND c NOT IN (SELECT a.customer FROM Account a)")
     List<Customer> findCustomersWithoutAccounts();
+
+    Customer findByUserUserId(Long userId);
 }

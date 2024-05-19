@@ -1,12 +1,13 @@
 package com.groupfour.bankingapp.Filter;
 
 
+import com.groupfour.bankingapp.Security.JwtTokenProvider;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import com.groupfour.bankingapp.Security.JwtProvider;
+import com.groupfour.bankingapp.Security.JwtTokenProvider;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,9 +21,9 @@ import java.io.PrintWriter;
 @Order(2)
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final JwtProvider jwtProvider;
+    private final JwtTokenProvider jwtProvider;
 
-    public JwtFilter(JwtProvider jwtProvider) {
+    public JwtFilter(JwtTokenProvider jwtProvider) {
         this.jwtProvider = jwtProvider;
     }
 
@@ -60,7 +61,6 @@ public class JwtFilter extends OncePerRequestFilter {
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
-
         return null;
     }
 }
