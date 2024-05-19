@@ -1,9 +1,8 @@
-package com.BankingAPI.BankingAPI.Group1.util;
+package com.groupfour.bankingapp.Security;
 
-
-import com.BankingAPI.BankingAPI.Group1.config.BeanFactory;
-import com.BankingAPI.BankingAPI.Group1.model.Enums.UserType;
-import com.BankingAPI.BankingAPI.Group1.service.MemberDetailsService;
+import com.groupfour.bankingapp.Config.BeanFactory;
+import com.groupfour.bankingapp.Models.UserType;
+import com.groupfour.bankingapp.Security.UserDetailsServiceImpl;
 import com.groupfour.bankingapp.Models.UserType;
 import com.groupfour.bankingapp.Security.JwtKeyProvider;
 import io.jsonwebtoken.*;
