@@ -6,7 +6,6 @@ import com.groupfour.bankingapp.Models.User;
 
 public record CustomerGetWithOutAccountDTO(Long userId,
                                            String name,
-                                           CustomerStatus status,
-                                           String dob,
-                                           Gender sex) {
+                                           CustomerStatus status
+                                           ) {
 }

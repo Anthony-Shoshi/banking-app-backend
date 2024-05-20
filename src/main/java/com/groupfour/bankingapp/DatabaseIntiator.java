@@ -45,16 +45,20 @@ public class DatabaseIntiator implements ApplicationRunner {
         Customer customer2= new Customer(user2, CustomerStatus.PENDING);
 
 
-        Account Account1 = new Account(customer1, "DE89 3704 0044 0532 0130 12", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
+        Account Account1 = new Account(customer1, "DE89 3704 0044 0532 0130 14", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
         Account Account2 = new Account(customer1, "DE89 3704 0044 0532 0130 00", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
 
 
-        Transaction tarns1 = new Transaction(TransactionType.DEPOSIT, UserType.ROLE_USER, customer1, Account1, Account2, 25.00, LocalDateTime.now(), TransactionStatus.SUCCESS, TransactionType.DEPOSIT );
         userRepository.save(user1);
+        userRepository.save(user2);
+
         customerRepository.save(customer1);
         customerRepository.save(customer2);
+
         accountRepository.save(Account1);
         accountRepository.save(Account2);
+
+        BankTransaction tarns1 = new BankTransaction(TransactionType.DEPOSIT, UserType.ROLE_USER, user1, Account1, Account2, 25.00, LocalDateTime.now(), TransactionStatus.SUCCESS );
         transactionRepository.save(tarns1);
 
     }

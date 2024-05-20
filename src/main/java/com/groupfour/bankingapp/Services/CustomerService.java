@@ -26,9 +26,9 @@ public class CustomerService {
                 .map(customer -> new CustomerGetWithOutAccountDTO(
                         customer.getUser().getUserId(),
                         customer.getUser().getFirstName()+" "+customer.getUser().getLastName(),
-                        customer.getStatus(),
-                        customer.getUser().getBirthDate(),
-                        customer.getGender())
+                        customer.getStatus())
+                       // customer.getUser().getBirthDate(),
+                      //  customer.getGender())
                 )
                 .collect(Collectors.toList());
     }

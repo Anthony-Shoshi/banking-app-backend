@@ -36,13 +36,27 @@ WebSecurityConfiguration {
         http.authorizeHttpRequests(
                 requests ->
                         requests.requestMatchers("/login").permitAll());
+    http.authorizeHttpRequests(
+                requests ->
+                        requests.requestMatchers("/employees/customer-accounts").permitAll());
         http.authorizeHttpRequests(
                 requests ->
                         requests.requestMatchers("/h2-console").permitAll());
-
         http.authorizeHttpRequests(
                 requests ->
-                        requests.requestMatchers("/pianos").authenticated());
+                        requests.requestMatchers("/transactions").permitAll());
+        http.authorizeHttpRequests(
+                requests ->
+                        requests.requestMatchers("/employees/customers-without-accounts").permitAll());
+        http.authorizeHttpRequests(
+                requests ->
+                        requests.requestMatchers("/employees/customers-without-accounts/{userId}/approve-signup").permitAll());
+        http.authorizeHttpRequests(
+                requests ->
+                        requests.requestMatchers("/customers/{customerId}/transactions").permitAll());
+        http.authorizeHttpRequests(
+                requests ->
+                        requests.requestMatchers("...").permitAll());
 
         http.addFilterBefore(jwtFilter,
                 UsernamePasswordAuthenticationFilter.class);
