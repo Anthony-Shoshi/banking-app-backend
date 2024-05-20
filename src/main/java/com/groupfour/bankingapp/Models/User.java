@@ -4,12 +4,8 @@ package com.groupfour.bankingapp.Models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.List;
-
-import jakarta.persistence.Entity;
 
 @Data
 @Entity
@@ -44,11 +40,17 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserType role; // Role is either employee or customer
 
+    @Column(nullable = false)
+    private String DateOFbirth;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
     // Default constructor
     public User() {}
 
     // Parameterized constructor
-    public User(String email, String password, String firstName, String lastName, String phoneNumber, String bsn, UserType role) {
+    public User(String email, String password, String firstName, String lastName, String phoneNumber, String bsn, UserType role, Gender gender, String DateOFbirth) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -56,6 +58,8 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.bsn = bsn;
         this.role = role;
+        this.DateOFbirth = DateOFbirth;
+        this.gender = gender;
     }
 
     // Getters and setters
@@ -119,5 +123,21 @@ public class User {
     private List<Role> roles;
     public void setRole(UserType role) {
         this.role = role;
+    }
+
+    public String getDateOFbirth() {
+        return DateOFbirth;
+    }
+
+    public void setDateOFbirth(String dateOFbirth) {
+        DateOFbirth = dateOFbirth;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 }

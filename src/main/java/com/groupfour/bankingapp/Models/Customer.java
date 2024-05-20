@@ -18,12 +18,7 @@ public class Customer implements Serializable {
     @Enumerated(EnumType.STRING)
     private CustomerStatus status;  // Enum for status (PENDING, APPROVED, REJECTED)
 
-    @Column(nullable = false)
-    private int age;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
@@ -33,11 +28,9 @@ public class Customer implements Serializable {
     public Customer() {}
 
     // Constructor with all fields
-    public Customer(User user, CustomerStatus status, int age, Gender gender) {
+    public Customer(User user, CustomerStatus status) {
         this.user = user;
         this.status = status;
-        this.age = age; //CHANGE THIS TO DOB
-        this.gender = gender;
     }
 
     // Getters and setters
@@ -57,21 +50,6 @@ public class Customer implements Serializable {
         this.status = status;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
 
     public User getUser() {
         return user;

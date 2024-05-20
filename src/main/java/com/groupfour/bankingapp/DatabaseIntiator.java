@@ -36,16 +36,20 @@ public class DatabaseIntiator implements ApplicationRunner {
         this.initiator();
     }
     private void initiator(){
-        User user1 = new User("user@gmail.com", bCryptPasswordEncoder.encode("123"), "Ador","Negash", "09220029", "fsgdgssgr", UserType.ROLE_USER );
+        User user1 = new User("user@gmail.com", bCryptPasswordEncoder.encode("123"), "Ador","Negash", "09220029", "fsgdgssgr", UserType.ROLE_USER ,Gender.MALE, "11-11-2000");
+        User user2 = new User("faizan@gmail.com", bCryptPasswordEncoder.encode("2345"), "Muhammad","Faizan", "06787545", "765569753", UserType.ROLE_EMPLOYEE ,Gender.MALE, "21-10-2003");
+
 //        Customer customer1= new Customer(user1, CustomerStatus.APPROVED, Gender.MALE);
-        Customer customer2= new Customer(user1, CustomerStatus.PENDING,18 ,Gender.MALE);
+        Customer customer1= new Customer(user1, CustomerStatus.PENDING);
+        Customer customer2= new Customer(user2, CustomerStatus.PENDING);
 
 //        Account Account1 = new Account(customer1, "DE89 3704 0044 0532 0130 12", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
 //        Account Account2 = new Account(customer1, "DE89 3704 0044 0532 0130 00", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
 
 
         userRepository.save(user1);
-//        customerRepository.save(customer1);
+        userRepository.save(user2);
+       customerRepository.save(customer1);
         customerRepository.save(customer2);
 //        accountRepository.save(Account1);
 //        accountRepository.save(Account2);
