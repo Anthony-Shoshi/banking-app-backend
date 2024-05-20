@@ -46,7 +46,7 @@ public class DatabaseIntiator implements ApplicationRunner {
 
         userRepository.save(user1);
 //        customerRepository.save(customer1);
-         customerRepository.save(customer2);
+        customerRepository.save(customer2);
 //        accountRepository.save(Account1);
 //        accountRepository.save(Account2);
         //transactionRepository.save(tarns1);
