@@ -36,6 +36,7 @@ public class DatabaseIntiator implements ApplicationRunner {
         this.initiator();
     }
     private void initiator(){
+
         User user1 = new User("user@gmail.com", bCryptPasswordEncoder.encode("123"), "Ador","Negash", "09220029", "fsgdgssgr", UserType.ROLE_USER ,Gender.MALE, "11-11-2000");
         User user2 = new User("faizan@gmail.com", bCryptPasswordEncoder.encode("2345"), "Muhammad","Faizan", "06787545", "765569753", UserType.ROLE_EMPLOYEE ,Gender.MALE, "21-10-2003");
 
