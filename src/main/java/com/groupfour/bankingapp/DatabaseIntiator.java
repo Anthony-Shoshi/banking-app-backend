@@ -37,8 +37,8 @@ public class DatabaseIntiator implements ApplicationRunner {
     private void initiator(){
 
 
-        User user1 = new User("user@gmail.com", bCryptPasswordEncoder.encode("123"), "Ador","Negash", "09220029", "fsgdgssgr", UserType.ROLE_USER ,Gender.MALE, "11-11-2000");
-        User user2 = new User("faizan@gmail.com", bCryptPasswordEncoder.encode("2345"), "Muhammad","Faizan", "06787545", "765569753", UserType.ROLE_EMPLOYEE ,Gender.MALE, "21-10-2003");
+        User user1 = new User("user@gmail.com", bCryptPasswordEncoder.encode("123"), "Ador","Negash", "09220029", "fsgdgssgr", UserType.CUSTOMER ,Gender.MALE, "11-11-2000");
+        User user2 = new User("faizan@gmail.com", bCryptPasswordEncoder.encode("2345"), "Muhammad","Faizan", "06787545", "765569753", UserType.EMPLOYEE ,Gender.MALE, "21-10-2003");
         User user3 = new User("mahbaan77@gmail.com", "123", "Fateme", "Sabagh", "0648673055", "fsgdgssgr", UserType.CUSTOMER, Gender.FEMALE, "11-11-2000");
         User user4 = new User("jon4@gmail.com", "1234", "Jon", "Smith", "09220029", "fsgdgs00", UserType.CUSTOMER, Gender.MALE, "21-10-2000");
 
@@ -85,7 +85,7 @@ public class DatabaseIntiator implements ApplicationRunner {
             System.out.println("User not found with ID: 1234");
         }
 
-        BankTransaction tarnsaction1 = new BankTransaction(TransactionType.DEPOSIT, UserType.ROLE_USER, user1, Account1, Account2, 25.00, LocalDateTime.now(), TransactionStatus.SUCCESS );
+        BankTransaction tarnsaction1 = new BankTransaction(TransactionType.DEPOSIT, UserType.CUSTOMER, user1, Account1, Account2, 25.00, LocalDateTime.now(), TransactionStatus.SUCCESS );
         transactionRepository.save(tarnsaction1);
 
     }
