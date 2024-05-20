@@ -38,10 +38,10 @@ public class ApplicationStarter implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
 
 
-        User user3 = new User("mahbaan77@gmail.com","123", "Fateme","Sabagh", "0648673055", "fsgdgssgr", UserType.CUSTOMER );
-        User user4 = new User("jon4@gmail.com","1234", "Jon","Smith", "09220029", "fsgdgs00", UserType.CUSTOMER );
-        Customer customer3= new Customer(user3, CustomerStatus.APPROVED, 19, Gender.FEMALE);
-        Customer customer4= new Customer(user4, CustomerStatus.APPROVED, 19, Gender.MALE);
+        User user3 = new User("mahbaan77@gmail.com","123", "Fateme","Sabagh", "0648673055", "fsgdgssgr", UserType.CUSTOMER, Gender.FEMALE, "11-11-2000");
+        User user4 = new User("jon4@gmail.com","1234", "Jon","Smith", "09220029", "fsgdgs00", UserType.CUSTOMER, Gender.MALE, "21-10-2000" );
+        Customer customer3= new Customer(user3, CustomerStatus.APPROVED);
+        Customer customer4= new Customer(user4, CustomerStatus.APPROVED);
         Account Account3 = new Account(customer3, "DE89 3704 0044 0532 0130 12", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
         Account Account4 = new Account(customer4, "DE89 3704 0044 0532 0130 11", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
 
