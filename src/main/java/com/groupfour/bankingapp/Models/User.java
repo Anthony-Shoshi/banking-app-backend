@@ -46,11 +46,13 @@ public class User {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
     // Default constructor
     public User() {}
 
     // Parameterized constructor
     public User(String email, String password, String firstName, String lastName, String phoneNumber, String bsn, UserType role, Gender gender, String DateOFbirth) {
+
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -60,6 +62,7 @@ public class User {
         this.role = role;
         this.DateOFbirth = DateOFbirth;
         this.gender = gender;
+
     }
 
     // Getters and setters
@@ -139,5 +142,6 @@ public class User {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+
     }
 }

@@ -19,7 +19,6 @@ public class Customer implements Serializable {
     private CustomerStatus status;  // Enum for status (PENDING, APPROVED, REJECTED)
 
 
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user; // Link to the User entity
@@ -28,9 +27,11 @@ public class Customer implements Serializable {
     public Customer() {}
 
     // Constructor with all fields
+
     public Customer(User user, CustomerStatus status) {
         this.user = user;
         this.status = status;
+
     }
 
     // Getters and setters
@@ -49,7 +50,6 @@ public class Customer implements Serializable {
     public void setStatus(CustomerStatus status) {
         this.status = status;
     }
-
 
     public User getUser() {
         return user;
