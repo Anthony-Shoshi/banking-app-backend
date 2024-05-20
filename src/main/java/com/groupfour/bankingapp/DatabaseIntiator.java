@@ -37,8 +37,11 @@ public class DatabaseIntiator implements ApplicationRunner {
     }
     private void initiator(){
         User user1 = new User("user@gmail.com", bCryptPasswordEncoder.encode("123"), "Ador","Negash", "09220029", "fsgdgssgr", UserType.ROLE_USER );
+        User user2 = new User("user@gmail.com", bCryptPasswordEncoder.encode("123"), "Ador","Negash", "09220029", "fsgdgssgr", UserType.ROLE_EMPLOYEE );
+
 //        Customer customer1= new Customer(user1, CustomerStatus.APPROVED, Gender.MALE);
         Customer customer2= new Customer(user1, CustomerStatus.PENDING,18 ,Gender.MALE);
+        Customer customer3= new Customer(user2, CustomerStatus.PENDING,18 ,Gender.MALE);
 
 //        Account Account1 = new Account(customer1, "DE89 3704 0044 0532 0130 12", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
 //        Account Account2 = new Account(customer1, "DE89 3704 0044 0532 0130 00", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
