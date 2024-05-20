@@ -1,6 +1,7 @@
 package com.groupfour.bankingapp.Controllers;
 
 import com.groupfour.bankingapp.Models.BankTransaction;
+import com.groupfour.bankingapp.Models.DTO.BankTransactionDTO;
 import com.groupfour.bankingapp.Services.TransactionService;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import javax.naming.AuthenticationException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @RestController
@@ -45,5 +47,11 @@ public class TransactionController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
+    }
+    @GetMapping("/customers/{customerId}/transactions")
+    public ResponseEntity<List<BankTransactionDTO>> getTransactionsByCustomerId(@PathVariable Long customerId) {
+        Optional<List<BankTransactionDTO>> transactions = transactionService.getTransactionsByCustomerId(customerId);
+        return transactions.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(404).build());
     }
 }

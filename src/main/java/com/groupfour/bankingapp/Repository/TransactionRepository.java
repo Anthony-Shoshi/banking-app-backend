@@ -12,5 +12,6 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<BankTransaction, Long> {
 
     List<BankTransaction> findAll(Specification<BankTransaction> specification, Pageable pageable);
+    List<BankTransaction> findByFromAccountCustomerCustomerId(Long customerId);
 }
 
