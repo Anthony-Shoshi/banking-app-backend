@@ -20,6 +20,4 @@ public class AccountController {
     public ResponseEntity<Object> getAllAccounts(){
         return  ResponseEntity.status(200).body(accountService.getAllAccountDetails());
     }
-
-
 }
