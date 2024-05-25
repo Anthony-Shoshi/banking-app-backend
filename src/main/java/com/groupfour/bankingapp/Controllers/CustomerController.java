@@ -21,7 +21,6 @@ public class CustomerController {
     @GetMapping("/employees/customers-without-accounts")
     public ResponseEntity<Object> getCustomersWithoutAccounts(){
         return ResponseEntity.status(200).body(customerService.getCustomersWithoutAccounts());
-
     }
 
     @PutMapping("/employees/customers-without-accounts/{userId}/approve-signup")
