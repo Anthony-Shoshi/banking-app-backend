@@ -33,7 +33,7 @@ public class UserService {
             Customer customer = customerRepository.findByUserUserId(user.getUserId());
             boolean isApproved = customer.getStatus() == CustomerStatus.APPROVED;
             String token = jwtTokenProvider.createToken(user.getUserId(), user.getRole(), isApproved);
-            return new LoginResponseDTO(user.getEmail(), token, user.getRole().name());
+            return new LoginResponseDTO(user.getEmail(), token, user.getRole().name(), user.getFirstName(), user.getLastName());
         } else {
             throw new AuthenticationException("Invalid credentials");
         }
