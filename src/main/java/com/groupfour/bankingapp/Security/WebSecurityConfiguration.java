@@ -54,9 +54,6 @@ WebSecurityConfiguration {
         http.authorizeHttpRequests(
                 requests ->
                         requests.requestMatchers("/customers/{customerId}/transactions").permitAll());
-        http.authorizeHttpRequests(
-                requests ->
-                        requests.requestMatchers("...").permitAll());
 
         http.addFilterBefore(jwtFilter,
                 UsernamePasswordAuthenticationFilter.class);
