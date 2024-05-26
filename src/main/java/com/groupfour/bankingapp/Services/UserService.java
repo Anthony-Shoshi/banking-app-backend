@@ -31,9 +31,12 @@ public class UserService {
         User user = userRepository.findByEmail(loginRequest.email());
         if (user != null && passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
             Customer customer = customerRepository.findByUserUserId(user.getUserId());
-            boolean isApproved = customer.getStatus() == CustomerStatus.APPROVED;
-            String token = jwtTokenProvider.createToken(user.getUserId(), user.getRole(), isApproved);
-            return new LoginResponseDTO(user.getEmail(), token, user.getRole().name(), user.getFirstName(), user.getLastName());
+            if (customer != null && customer.getStatus() == CustomerStatus.APPROVED) {
+                String token = jwtTokenProvider.createToken(user.getUserId(), user.getRole(), true); // Always set approved to true here
+                return new LoginResponseDTO(user.getEmail(), token, user.getRole().name(), user.getFirstName(), user.getLastName());
+            } else {
+                throw new AuthenticationException("Your Account has not been approved yet. Please wait for approval.");
+            }
         } else {
             throw new AuthenticationException("Invalid credentials");
         }
