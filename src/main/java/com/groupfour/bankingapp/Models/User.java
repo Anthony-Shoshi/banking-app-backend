@@ -9,13 +9,11 @@ import java.util.List;
 
 @Data
 @Entity
-//@NoArgsConstructor
-//@AllArgsConstructor
 @Table(name = "users")
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userId;
 
 
@@ -33,11 +31,11 @@ public class User {
 
     private String phoneNumber;
 
-    // BSN is typically unique, so we ensure uniqueness here as well
-   // @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String bsn;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private UserType role; // Role is either employee or customer
 
     @Column(nullable = false)
@@ -47,12 +45,12 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+
     // Default constructor
     public User() {}
 
     // Parameterized constructor
     public User(String email, String password, String firstName, String lastName, String phoneNumber, String bsn, UserType role, Gender gender, String DateOFbirth) {
-
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -60,9 +58,8 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.bsn = bsn;
         this.role = role;
-        this.DateOFbirth = DateOFbirth;
         this.gender = gender;
-
+        this.DateOFbirth = DateOFbirth;
     }
 
     // Getters and setters
