@@ -46,6 +46,8 @@ public class User {
     private Gender gender;
 
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Customer customer;
     // Default constructor
     public User() {}
 
@@ -140,5 +142,13 @@ public class User {
     public void setGender(Gender gender) {
         this.gender = gender;
 
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }

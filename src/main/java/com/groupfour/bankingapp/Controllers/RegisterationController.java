@@ -41,25 +41,25 @@ public class RegisterationController {
         // Validate email format
         if (!Pattern.matches("[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$", requestDTO.email())) {
             logger.warning("Invalid email format");
-            return ResponseEntity.badRequest().body("Invalid email format");
+            return ResponseEntity.badRequest().body("Invalid email format. Please provide a valid email address.");
         }
 
         // Validate password
         if (!Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", requestDTO.password())) {
             logger.warning("Invalid password format");
-            return ResponseEntity.badRequest().body("Invalid password format");
+            return ResponseEntity.badRequest().body("Invalid password format. Password must contain at least 8 characters including uppercase, lowercase, numbers, and special characters.");
         }
 
         // Validate BSN format
         if (!Pattern.matches("\\d{9}", requestDTO.bsn())) {
             logger.warning("Invalid BSN format");
-            return ResponseEntity.badRequest().body("Invalid BSN format");
+            return ResponseEntity.badRequest().body("Invalid BSN format. Please provide a valid BSN (9 digits).");
         }
 
         // Validate phone number format
         if (!Pattern.matches("\\d{9}", requestDTO.phoneNumber())) {
             logger.warning("Invalid phone number format");
-            return ResponseEntity.badRequest().body("Invalid phone number format");
+            return ResponseEntity.badRequest().body("Invalid phone number format. Please provide a valid phone number (9 digits).");
         }
 
         // Create new User object
