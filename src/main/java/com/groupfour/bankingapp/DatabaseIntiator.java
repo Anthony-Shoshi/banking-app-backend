@@ -34,6 +34,7 @@ public class DatabaseIntiator implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         this.initiator();
     }
+
     private void initiator(){
 
 
@@ -46,7 +47,6 @@ public class DatabaseIntiator implements ApplicationRunner {
         Customer customer2= new Customer(user2, CustomerStatus.PENDING);
         Customer customer3 = new Customer(user3, CustomerStatus.APPROVED);
         Customer customer4 = new Customer(user4, CustomerStatus.APPROVED);
-
 
         Account Account1 = new Account(customer1, "DE89 3704 0044 0532 0130 14", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
         Account Account2 = new Account(customer1, "DE89 3704 0044 0532 0130 00", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
@@ -67,7 +67,6 @@ public class DatabaseIntiator implements ApplicationRunner {
         accountRepository.save(Account2);
         accountRepository.save(Account3);
         accountRepository.save(Account4);
-
 
         if (user3 != null) {
             BankTransaction tarnsaction2 = new BankTransaction(
