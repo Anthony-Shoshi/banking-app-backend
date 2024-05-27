@@ -41,7 +41,7 @@ WebSecurityConfiguration {
                         requests.requestMatchers("/employees/customer-accounts").permitAll());
         http.authorizeHttpRequests(
                 requests ->
-                        requests.requestMatchers("/h2-console/**").permitAll());
+                        requests.requestMatchers("/h2-console").permitAll());
         http.authorizeHttpRequests(
                 requests ->
                         requests.requestMatchers("/transactions").permitAll());
@@ -54,10 +54,12 @@ WebSecurityConfiguration {
         http.authorizeHttpRequests(
                 requests ->
                         requests.requestMatchers("/customers/{customerId}/transactions").permitAll());
-
-        http.authorizeHttpRequests(requests -> requests
-                .requestMatchers("/register/**").permitAll()  // Ensure register endpoint is permitted
-                .anyRequest().authenticated());
+        http.authorizeHttpRequests(
+                requests ->
+                        requests.requestMatchers("/customers/transaction-history").permitAll());
+        http.authorizeHttpRequests(
+                requests ->
+                        requests.requestMatchers("...").permitAll());
 
         http.addFilterBefore(jwtFilter,
                 UsernamePasswordAuthenticationFilter.class);

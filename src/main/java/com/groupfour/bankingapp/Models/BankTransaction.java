@@ -11,6 +11,7 @@ public class BankTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Enumerated(EnumType.STRING)
     private TransactionType type;
 
@@ -25,12 +26,12 @@ public class BankTransaction {
 
     @ManyToOne
     private Account toAccount;
+
     @Column
     private Double transferAmount;
 
     @Column(name = "transaction_time")
     private LocalDateTime currentTime;
-
 
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;
