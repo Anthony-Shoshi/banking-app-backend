@@ -38,13 +38,13 @@ public class DatabaseIntiator implements ApplicationRunner {
     private void initiator(){
 
 
-        User user1 = new User("user@gmail.com", bCryptPasswordEncoder.encode("123"), "Ador","Negash", "09220029", "fsgdgssgr", UserType.CUSTOMER ,Gender.MALE, "11-11-2000");
-        User user2 = new User("faizan@gmail.com", bCryptPasswordEncoder.encode("2345"), "Muhammad","Faizan", "06787545", "765569753", UserType.EMPLOYEE ,Gender.MALE, "21-10-2003");
-        User user3 = new User("mahbaan77@gmail.com", "123", "Fateme", "Sabagh", "0648673055", "fsgdgssgr", UserType.CUSTOMER, Gender.FEMALE, "11-11-2000");
-        User user4 = new User("jon4@gmail.com", "1234", "Jon", "Smith", "09220029", "fsgdgs00", UserType.CUSTOMER, Gender.MALE, "21-10-2000");
+        User user1 = new User("user@gmail.com", bCryptPasswordEncoder.encode("123"), "Ador","Negash", "092200293", "242656789", UserType.CUSTOMER ,Gender.MALE, "11-11-2000");
+        User user2 = new User("faizan@gmail.com", bCryptPasswordEncoder.encode("2345"), "Muhammad","Faizan", "067875453", "765569753", UserType.EMPLOYEE ,Gender.MALE, "21-10-2003");
+        User user3 = new User("mahbaan77@gmail.com", "123", "Fateme", "Sabagh", "068673055", "876576524", UserType.CUSTOMER, Gender.FEMALE, "11-11-2000");
+        User user4 = new User("jon4@gmail.com", "1234", "Jon", "Smith", "092220029", "878651434", UserType.CUSTOMER, Gender.MALE, "21-10-2000");
 
         Customer customer1= new Customer(user1, CustomerStatus.PENDING);
-        Customer customer2= new Customer(user2, CustomerStatus.PENDING);
+        Customer customer2= new Customer(user2, CustomerStatus.APPROVED);
         Customer customer3 = new Customer(user3, CustomerStatus.APPROVED);
         Customer customer4 = new Customer(user4, CustomerStatus.APPROVED);
 
