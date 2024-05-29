@@ -56,7 +56,7 @@ WebSecurityConfiguration {
                         requests.requestMatchers("/customers/{customerId}/transactions").permitAll());
 
         http.authorizeHttpRequests(requests -> requests
-                .requestMatchers("/register/**").permitAll()  // Ensure register endpoint is permitted
+                .requestMatchers("/register/**").permitAll()
                 .anyRequest().authenticated());
 
         http.addFilterBefore(jwtFilter,

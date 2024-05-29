@@ -78,5 +78,21 @@ public class AccountService {
     private boolean ibanExists(String iban) {
         return accountRepository.existsByIBAN(iban);
     }
+
+    public Object getAccountDetails(Long userId) throws RuntimeException {
+        return accountRepository.findAccountsByCustomerId(userId).stream()
+                .map(account -> new AccountsGetDTO(
+                        account.getAccountId(),
+                        account.getCustomer().getCustomerId(),
+                        account.getCustomer().getUser().getFirstName(),
+                        account.getIBAN(),
+                        account.getBalance(),
+                        account.getAccountType(),
+                        account.getCustomer().getStatus(),
+                        account.getAbsoluteLimit(),
+                        account.getDailyLimit())
+                )
+                .collect(Collectors.toList());
+    }
 }
 

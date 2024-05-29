@@ -1,6 +1,8 @@
 package com.groupfour.bankingapp.Models;
 
-public enum UserType {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum UserType implements GrantedAuthority {
     CUSTOMER,
     EMPLOYEE,
     USER;
