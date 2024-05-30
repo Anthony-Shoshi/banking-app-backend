@@ -12,12 +12,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import java.util.Random;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AccountService {
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
     public AccountService(AccountRepository accountRepository){
         this.accountRepository = accountRepository;
@@ -77,6 +75,11 @@ public class AccountService {
 
     private boolean ibanExists(String iban) {
         return accountRepository.existsByIBAN(iban);
+    }
+
+    public List<String> getIbansByCustomerName(String firstName, String lastName) {
+        List<Account> accounts = accountRepository.findByCustomerFirstNameAndLastName(firstName, lastName);
+        return accounts.stream().map(Account::getIBAN).collect(Collectors.toList());
     }
 }
 
