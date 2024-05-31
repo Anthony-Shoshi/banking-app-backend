@@ -3,12 +3,15 @@ package com.groupfour.bankingapp.Services;
 import com.groupfour.bankingapp.Models.Account;
 import com.groupfour.bankingapp.Models.AccountType;
 import com.groupfour.bankingapp.Models.Customer;
+import com.groupfour.bankingapp.Models.CustomerStatus;
 import com.groupfour.bankingapp.Models.DTO.AccountsGetDTO;
 import com.groupfour.bankingapp.Models.DTO.ApproveSignupPutDTO;
 import com.groupfour.bankingapp.Repository.AccountRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import java.util.Random;
@@ -19,11 +22,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class AccountService {
     private AccountRepository accountRepository;
 
-    public AccountService(AccountRepository accountRepository){
+    public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
 
-    public List<AccountsGetDTO> getAllAccountDetails(){
+    public List<AccountsGetDTO> getAllAccountDetails() {
         return accountRepository.findAll().stream()
                 .map(account -> new AccountsGetDTO(
                         account.getAccountId(),
@@ -35,14 +38,15 @@ public class AccountService {
                         account.getCustomer().getStatus(),
                         account.getAbsoluteLimit(),
                         account.getDailyLimit())
-                      )
+                )
                 .collect(Collectors.toList());
     }
 
-    public void createAccount(Customer customer, ApproveSignupPutDTO approveSignupPutDTO) throws RuntimeException{
-                create(customer, AccountType.CURRENT, approveSignupPutDTO.absoluteLimitForCurrent(), approveSignupPutDTO.dailyLimit());
-                create(customer, AccountType.SAVING, approveSignupPutDTO.absoluteLimitForSaving() , approveSignupPutDTO.dailyLimit());
+    public void createAccount(Customer customer, ApproveSignupPutDTO approveSignupPutDTO) throws RuntimeException {
+        create(customer, AccountType.CURRENT, approveSignupPutDTO.absoluteLimitForCurrent(), approveSignupPutDTO.dailyLimit());
+        create(customer, AccountType.SAVING, approveSignupPutDTO.absoluteLimitForSaving(), approveSignupPutDTO.dailyLimit());
     }
+
     private void create(Customer customer, AccountType accountType, Double absoluteLimit, Double dailyLimit) {
         Account account = new Account();
         account.setCustomer(customer);
@@ -55,6 +59,7 @@ public class AccountService {
         account.setCurrency("€");
         accountRepository.save(account);
     }
+
     private String generateUniqueIBAN() {
         int generationAttempts = 0;
         String iban;
@@ -80,19 +85,25 @@ public class AccountService {
     }
 
     public Object getAccountDetails(Long userId) throws RuntimeException {
-        return accountRepository.findAccountsByCustomerId(userId).stream()
-                .map(account -> new AccountsGetDTO(
-                        account.getAccountId(),
-                        account.getCustomer().getCustomerId(),
-                        account.getCustomer().getUser().getFirstName(),
-                        account.getIBAN(),
-                        account.getBalance(),
-                        account.getAccountType(),
-                        account.getCustomer().getStatus(),
-                        account.getAbsoluteLimit(),
-                        account.getDailyLimit())
-                )
-                .collect(Collectors.toList());
+        List<Account> accounts = accountRepository.findByCustomerId(userId);
+        if (accounts.isEmpty()) {
+            throw new RuntimeException("No accounts found for user ID: " + userId);
+        }
+
+        List<AccountsGetDTO> accountDetails = new ArrayList<>();
+        for (Account account : accounts) {
+            accountDetails.add(new AccountsGetDTO(
+                    account.getAccountId(),
+                    account.getCustomer().getCustomerId(),
+                    account.getCustomer().getUser().getFirstName() + " " + account.getCustomer().getUser().getLastName(),
+                    account.getIBAN(),
+                    account.getBalance(),
+                    account.getAccountType(),
+                    account.getCustomer().getStatus(),
+                    account.getAbsoluteLimit(),
+                    account.getDailyLimit()
+            ));
+        }
+        return accountDetails;
     }
 }
-

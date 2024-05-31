@@ -54,6 +54,9 @@ WebSecurityConfiguration {
         http.authorizeHttpRequests(
                 requests ->
                         requests.requestMatchers("/customers/{customerId}/transactions").permitAll());
+        http.authorizeHttpRequests(
+                requests ->
+                        requests.requestMatchers("/account-detail").permitAll());
 
         http.authorizeHttpRequests(requests -> requests
                 .requestMatchers("/register/**").permitAll()
