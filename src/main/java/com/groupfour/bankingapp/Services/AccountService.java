@@ -79,7 +79,7 @@ public class AccountService {
         return accountRepository.existsByIBAN(iban);
     }
 
-    public Object getAccountDetails(Long userId) throws RuntimeException {
+   /* public Object getAccountDetails(Long userId) throws RuntimeException {
         return accountRepository.findAccountsByCustomerId(userId).stream()
                 .map(account -> new AccountsGetDTO(
                         account.getAccountId(),
@@ -93,6 +93,6 @@ public class AccountService {
                         account.getDailyLimit())
                 )
                 .collect(Collectors.toList());
-    }
+    }*/
 }
 

@@ -21,9 +21,9 @@ public class AccountController {
     public ResponseEntity<Object> getAllAccounts(){
         return  ResponseEntity.status(200).body(accountService.getAllAccountDetails());
     }
-    @GetMapping("/account-detail")
+  /*  @GetMapping("/account-detail")
     //@PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
     public ResponseEntity<Object> getAccountDetails(@PathVariable Long userId){
         return ResponseEntity.status(200).body(accountService.getAccountDetails(userId));
-    }
+    }*/
 }
