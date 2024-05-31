@@ -7,13 +7,13 @@ import com.groupfour.bankingapp.Models.DTO.AccountsGetDTO;
 import com.groupfour.bankingapp.Models.DTO.ApproveSignupPutDTO;
 import com.groupfour.bankingapp.Repository.AccountRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import java.util.Random;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 public class AccountService {
@@ -78,5 +78,15 @@ public class AccountService {
     private boolean ibanExists(String iban) {
         return accountRepository.existsByIBAN(iban);
     }
+
+    public void updateDailyLimit(Long accountId, double dailyLimit) throws RuntimeException {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new RuntimeException("Account not found with ID: " + accountId));
+        account.setDailyLimit(dailyLimit);
+        accountRepository.save(account);
+    }
+
 }
+
+
 

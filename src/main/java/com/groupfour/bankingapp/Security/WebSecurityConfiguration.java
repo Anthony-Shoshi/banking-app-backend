@@ -59,6 +59,9 @@ WebSecurityConfiguration {
                         requests.requestMatchers("/customers/transaction-history").permitAll());
         http.authorizeHttpRequests(
                 requests ->
+                        requests.requestMatchers("/employees/update-daily-limit").permitAll());
+        http.authorizeHttpRequests(
+                requests ->
                         requests.requestMatchers("...").permitAll());
 
         http.addFilterBefore(jwtFilter,

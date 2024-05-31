@@ -5,7 +5,6 @@ import com.groupfour.bankingapp.Repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -54,7 +53,7 @@ public class BeanFactory {
             throw new IllegalArgumentException("Invalid user ID");
         }
 
-
+        //return user;
         return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
