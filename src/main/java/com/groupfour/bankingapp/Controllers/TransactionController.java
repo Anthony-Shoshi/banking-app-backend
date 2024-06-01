@@ -27,7 +27,7 @@ import java.util.Optional;
 @RestController
 @ControllerAdvice
 @Log
-@RequestMapping("/transactions")
+//@RequestMapping("/transactions")
 public class TransactionController {
 
     private final TransactionService transactionService;
@@ -50,7 +50,7 @@ public class TransactionController {
                 .body(response);
     }
 
-    @GetMapping
+    @GetMapping("/transactions")
     public ResponseEntity<Object> getAllTransactions() {
         try {
             return ResponseEntity.status(200).body(transactionService.getAllTransactions());
@@ -62,9 +62,15 @@ public class TransactionController {
 
     @GetMapping("/customers/{customerId}/transactions")
     public ResponseEntity<List<BankTransactionDTO>> getTransactionsByCustomerId(@PathVariable Long customerId) {
+        // Log incoming request for debugging
+        System.out.println("Fetching transactions for customer ID: " + customerId);
+
         Optional<List<BankTransactionDTO>> transactions = transactionService.getTransactionsByCustomerId(customerId);
-        return transactions.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(404).build());
+        if (transactions.isPresent()) {
+            return ResponseEntity.ok(transactions.get());
+        } else {
+            return ResponseEntity.status(404).build();
+        }
     }
 
     @GetMapping("/customers/transaction-history")
@@ -87,7 +93,7 @@ public class TransactionController {
         return ResponseEntity.ok(transactions);
     }
 
-    @PostMapping
+    @PostMapping("/transactions")
     public ResponseEntity<BankTransactionPostDTO> transferMoney(@RequestBody BankTransactionPostDTO transferRequest, HttpServletRequest request) {
         try {
             // Log headers

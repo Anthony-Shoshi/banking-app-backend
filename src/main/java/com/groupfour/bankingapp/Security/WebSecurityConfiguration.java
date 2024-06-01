@@ -106,36 +106,6 @@ public class WebSecurityConfiguration {
         http.sessionManagement(
                 session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.authorizeHttpRequests(
-                requests ->
-                        requests.requestMatchers("/login").permitAll());
-    http.authorizeHttpRequests(
-                requests ->
-                        requests.requestMatchers("/employees/customer-accounts").permitAll());
-        http.authorizeHttpRequests(
-                requests ->
-                        requests.requestMatchers("/h2-console").permitAll());
-        http.authorizeHttpRequests(
-                requests ->
-                        requests.requestMatchers("/transactions").permitAll());
-        http.authorizeHttpRequests(
-                requests ->
-                        requests.requestMatchers("/employees/customers-without-accounts").permitAll());
-        http.authorizeHttpRequests(
-                requests ->
-                        requests.requestMatchers("/employees/customers-without-accounts/{userId}/approve-signup").permitAll());
-        http.authorizeHttpRequests(
-                requests ->
-                        requests.requestMatchers("/customers/{customerId}/transactions").permitAll());
-        http.authorizeHttpRequests(
-                requests ->
-                        requests.requestMatchers("/customers/transaction-history").permitAll());
-        http.authorizeHttpRequests(
-                requests ->
-                        requests.requestMatchers("/employees/update-daily-limit").permitAll());
-        http.authorizeHttpRequests(
-                requests ->
-                        requests.requestMatchers("...").permitAll());
 
         http.authorizeHttpRequests(requests -> {
             requests.requestMatchers("/login").permitAll();
@@ -149,6 +119,7 @@ public class WebSecurityConfiguration {
             requests.requestMatchers("/customers/search-iban").permitAll();
             requests.requestMatchers("/customers/deposit").permitAll();
             requests.requestMatchers("/customers/withdraw").permitAll();
+            requests.requestMatchers("/employees/update-daily-limit").permitAll();
             // Add more requestMatchers as needed
             requests.anyRequest().authenticated(); // All other requests need to be authenticated
         });
