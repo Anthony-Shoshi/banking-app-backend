@@ -105,8 +105,37 @@ public class WebSecurityConfiguration {
 
         http.sessionManagement(
                 session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        );
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.authorizeHttpRequests(
+                requests ->
+                        requests.requestMatchers("/login").permitAll());
+    http.authorizeHttpRequests(
+                requests ->
+                        requests.requestMatchers("/employees/customer-accounts").permitAll());
+        http.authorizeHttpRequests(
+                requests ->
+                        requests.requestMatchers("/h2-console").permitAll());
+        http.authorizeHttpRequests(
+                requests ->
+                        requests.requestMatchers("/transactions").permitAll());
+        http.authorizeHttpRequests(
+                requests ->
+                        requests.requestMatchers("/employees/customers-without-accounts").permitAll());
+        http.authorizeHttpRequests(
+                requests ->
+                        requests.requestMatchers("/employees/customers-without-accounts/{userId}/approve-signup").permitAll());
+        http.authorizeHttpRequests(
+                requests ->
+                        requests.requestMatchers("/customers/{customerId}/transactions").permitAll());
+        http.authorizeHttpRequests(
+                requests ->
+                        requests.requestMatchers("/customers/transaction-history").permitAll());
+        http.authorizeHttpRequests(
+                requests ->
+                        requests.requestMatchers("/employees/update-daily-limit").permitAll());
+        http.authorizeHttpRequests(
+                requests ->
+                        requests.requestMatchers("...").permitAll());
 
         http.authorizeHttpRequests(requests -> {
             requests.requestMatchers("/login").permitAll();

@@ -12,7 +12,11 @@ import java.util.List;
 public interface AccountRepository extends JpaRepository <Account, Long>{
     boolean existsByIBAN(String iban);
 
+
     @Query("SELECT a FROM Account a WHERE a.customer.user.firstName = :firstName AND a.customer.user.lastName = :lastName")
     List<Account> findByCustomerFirstNameAndLastName(@Param("firstName") String firstName, @Param("lastName") String lastName);
+
+
+    Account findByIBAN(String iban);
 
 }

@@ -5,9 +5,12 @@ import com.groupfour.bankingapp.Models.DTO.BankTransactionDTO;
 import com.groupfour.bankingapp.Models.DTO.TransactionRequestDTO;
 import com.groupfour.bankingapp.Repository.AccountRepository;
 import com.groupfour.bankingapp.Repository.TransactionRepository;
+import com.groupfour.bankingapp.Config.BeanFactory;
+import com.groupfour.bankingapp.Models.DTO.BankTransactionPostDTO;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+//import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -20,11 +23,20 @@ import java.util.stream.Collectors;
 public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
+    private final BeanFactory beanFactory;
 
-    public TransactionService(TransactionRepository transactionRepository, AccountRepository accountRepository) {
+    private final UserService userService;
+    private final HttpServletRequest request;
+
+    public TransactionService(TransactionRepository transactionRepository, AccountRepository accountRepository, BeanFactory beanFactory, UserService userService, HttpServletRequest request) {
         this.transactionRepository = transactionRepository;
         this.accountRepository = accountRepository;
+        this.beanFactory = beanFactory;
+        this.userService= userService;
+        this.request = request;
+
     }
+
 
     public List<BankTransactionDTO> getAllTransactions() {
         List<BankTransaction> transactions = transactionRepository.findAll();
@@ -228,4 +240,77 @@ public class TransactionService {
                 transaction.getStatus()
         );
     }
+
+    @Transactional
+    public BankTransactionPostDTO transferMoney(String fromAccountIban, String toAccountIban, double transferAmount) {
+        Account fromAccount = getAccountByIban(fromAccountIban);
+        Account toAccount = getAccountByIban(toAccountIban);
+
+        validateAccounts(fromAccount, toAccount);
+        validateSufficientFunds(fromAccount, transferAmount);
+
+        executeTransfer(fromAccount, toAccount, transferAmount);
+
+        BankTransaction transaction = createTransaction(fromAccount, toAccount, transferAmount);
+        transactionRepository.save(transaction);
+
+        return createBankTransactionPostDTO(fromAccountIban, toAccountIban, transferAmount);
+    }
+
+    private Account getAccountByIban(String iban) {
+        return accountRepository.findByIBAN(iban);
+    }
+
+    private void validateAccounts(Account fromAccount, Account toAccount) {
+        if (fromAccount == null || toAccount == null) {
+            throw new IllegalArgumentException("Source or destination account not found");
+        }
+    }
+
+    private void validateSufficientFunds(Account fromAccount, double transferAmount) {
+        if (fromAccount.getBalance() < transferAmount) {
+            throw new IllegalArgumentException("Insufficient funds");
+        }
+    }
+
+    private void executeTransfer(Account fromAccount, Account toAccount, double transferAmount) {
+        fromAccount.setBalance(fromAccount.getBalance() - transferAmount);
+        toAccount.setBalance(toAccount.getBalance() + transferAmount);
+
+        accountRepository.save(fromAccount);
+        accountRepository.save(toAccount);
+    }
+
+    private BankTransaction createTransaction(Account fromAccount, Account toAccount, double transferAmount) {
+        User initiator = null;
+        try {
+            initiator = userService.getCurrentLoggedInUser(request);
+            if (initiator == null) {
+                throw new NullPointerException("Initiator is null");
+            }
+        } catch (Exception e) {
+            // Handle the exception (e.g., log it and return null or a default transaction)
+            System.err.println("Failed to create transaction: " + e.getMessage());
+            return null; // or handle it in another appropriate way
+        }
+
+        return new BankTransaction(
+                TransactionType.TRANSFER,
+                UserType.EMPLOYEE,
+                initiator,
+                fromAccount,
+                toAccount,
+                transferAmount,
+                LocalDateTime.now(),
+                TransactionStatus.SUCCESS
+        );
+    }
+    private BankTransactionPostDTO createBankTransactionPostDTO(String fromAccountIban, String toAccountIban, double transferAmount) {
+        return new BankTransactionPostDTO(
+                fromAccountIban,
+                toAccountIban,
+                transferAmount
+        );
+    }
+
 }
