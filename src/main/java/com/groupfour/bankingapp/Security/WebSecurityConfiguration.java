@@ -56,6 +56,7 @@ WebSecurityConfiguration {
                         requests.requestMatchers("/customers/{customerId}/transactions").permitAll());
         http.authorizeHttpRequests(
                 requests ->
+
                         requests.requestMatchers("/customers/transaction-history").permitAll());
         http.authorizeHttpRequests(
                 requests ->
@@ -63,6 +64,13 @@ WebSecurityConfiguration {
         http.authorizeHttpRequests(
                 requests ->
                         requests.requestMatchers("...").permitAll());
+
+                        requests.requestMatchers("/account-detail").permitAll());
+
+        http.authorizeHttpRequests(requests -> requests
+                .requestMatchers("/register/**").permitAll()
+                .anyRequest().authenticated());
+
 
         http.addFilterBefore(jwtFilter,
                 UsernamePasswordAuthenticationFilter.class);
