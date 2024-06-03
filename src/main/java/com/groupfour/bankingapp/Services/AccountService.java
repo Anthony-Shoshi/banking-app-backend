@@ -1,5 +1,6 @@
 package com.groupfour.bankingapp.Services;
 
+import com.groupfour.bankingapp.Controllers.AccountController;
 import com.groupfour.bankingapp.Models.Account;
 import com.groupfour.bankingapp.Models.AccountType;
 import com.groupfour.bankingapp.Models.Customer;
@@ -60,7 +61,7 @@ public class AccountService {
         accountRepository.save(account);
     }
 
-    private String generateUniqueIBAN() {
+    public String generateUniqueIBAN() {
         int generationAttempts = 0;
         String iban;
         do {
@@ -84,7 +85,7 @@ public class AccountService {
         return accountRepository.existsByIBAN(iban);
     }
 
-    public Object getAccountDetails(Long userId) throws RuntimeException {
+    public Object getAccountDetails(Long userId) throws AccountController.AccountNotFoundException {
         List<Account> accounts = accountRepository.findByCustomerId(userId);
         if (accounts.isEmpty()) {
             throw new RuntimeException("No accounts found for user ID: " + userId);
