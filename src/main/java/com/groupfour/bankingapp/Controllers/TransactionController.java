@@ -27,7 +27,7 @@ import java.util.Optional;
 @RestController
 @ControllerAdvice
 @Log
-@RequestMapping("/transactions")
+
 public class TransactionController {
 
     private final TransactionService transactionService;
@@ -50,7 +50,7 @@ public class TransactionController {
                 .body(response);
     }
 
-    @GetMapping
+    @GetMapping("/transactions")
     public ResponseEntity<Object> getAllTransactions() {
         try {
             return ResponseEntity.status(200).body(transactionService.getAllTransactions());
@@ -87,7 +87,7 @@ public class TransactionController {
         return ResponseEntity.ok(transactions);
     }
 
-    @PostMapping
+    @PostMapping("/transactions")
     public ResponseEntity<BankTransactionPostDTO> transferMoney(@RequestBody BankTransactionPostDTO transferRequest, HttpServletRequest request) {
         try {
             // Log headers

@@ -106,6 +106,17 @@ public class TransactionService {
                         transaction.getStatus()))
                 .collect(Collectors.toList());
     }
+    private double getTotalTransferredAmountToday(Account fromAccount) {
+        LocalDateTime startOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
+        LocalDateTime endOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+
+        List<BankTransaction> todayTransactions = transactionRepository.findByFromAccountAndCurrentTimeBetween(
+                fromAccount, startOfDay, endOfDay);
+
+        return todayTransactions.stream()
+                .mapToDouble(BankTransaction::getTransferAmount)
+                .sum();
+    }
 
     @Transactional
     public BankTransactionPostDTO transferMoney(String fromAccountIban, String toAccountIban, double transferAmount) {
@@ -114,6 +125,7 @@ public class TransactionService {
 
         validateAccounts(fromAccount, toAccount);
         validateSufficientFunds(fromAccount, transferAmount);
+        validateDailyLimit(fromAccount, transferAmount);
 
         executeTransfer(fromAccount, toAccount, transferAmount);
 
@@ -122,6 +134,14 @@ public class TransactionService {
 
         return createBankTransactionPostDTO(fromAccountIban, toAccountIban, transferAmount);
     }
+
+    private void validateDailyLimit(Account fromAccount, double transferAmount) {
+        double totalTransferredToday = getTotalTransferredAmountToday(fromAccount);
+        if (totalTransferredToday + transferAmount > fromAccount.getDailyLimit()) {
+            throw new IllegalArgumentException("Transfer amount exceeds the daily limit");
+        }
+    }
+
 
     private Account getAccountByIban(String iban) {
         return accountRepository.findByIBAN(iban);
@@ -155,9 +175,8 @@ public class TransactionService {
                 throw new NullPointerException("Initiator is null");
             }
         } catch (Exception e) {
-            // Handle the exception (e.g., log it and return null or a default transaction)
             System.err.println("Failed to create transaction: " + e.getMessage());
-            return null; // or handle it in another appropriate way
+            return null;
         }
 
         return new BankTransaction(

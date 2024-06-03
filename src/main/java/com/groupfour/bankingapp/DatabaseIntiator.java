@@ -50,7 +50,7 @@ public class DatabaseIntiator implements ApplicationRunner {
 
         Account Account1 = new Account(customer1, "DE89 3704 0044 0532 0130 14", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
         Account Account2 = new Account(customer1, "DE89 3704 0044 0532 0130 00", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
-        Account Account3 = new Account(customer3, "DE89 3704 0044 0532 0130 12", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
+        Account Account3 = new Account(customer3, "DE89 3704 0044 0532 0130 12", 100.00, 00.00, AccountType.CURRENT, true, 50.00, AccountStatus.ACTIVE, "€");
         Account Account4 = new Account(customer4, "DE89 3704 0044 0532 0130 11", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
 
         userRepository.save(user1);
