@@ -2,6 +2,7 @@ package com.groupfour.bankingapp.Controllers;
 
 
 import com.groupfour.bankingapp.Models.DTO.AccountPutDTO;
+import com.groupfour.bankingapp.Models.DTO.AccountsGetDTO;
 import com.groupfour.bankingapp.Services.AccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,5 +47,11 @@ public class AccountController {
             return ResponseEntity.status(400).body(e.getMessage());
         }
 
+    }
+
+    @GetMapping("/accounts/{userId}")
+    public ResponseEntity<List<AccountsGetDTO>> getAccountsByUserId(@PathVariable Long userId) {
+        List<AccountsGetDTO> accounts = accountService.getAccountsByUserId(userId);
+        return ResponseEntity.ok(accounts);
     }
 }

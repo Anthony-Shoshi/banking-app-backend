@@ -41,7 +41,7 @@ public class UserService {
             Customer customer = customerRepository.findByUserUserId(user.getUserId());
             if (customer != null && customer.getStatus() == CustomerStatus.APPROVED) {
                 String token = jwtTokenProvider.createToken(user.getUserId(), user.getRole(), true); // Always set approved to true here
-                return new LoginResponseDTO(user.getEmail(), token, user.getRole().name(), user.getFirstName(), user.getLastName());
+                return new LoginResponseDTO(user.getUserId(), user.getCustomer().getCustomerId(), user.getEmail(), token, user.getRole().name(), user.getFirstName(), user.getLastName());
             } else {
                 throw new AuthenticationException("Your Account has not been approved yet. Please wait for approval.");
             }

@@ -43,7 +43,7 @@ public class DatabaseIntiator implements ApplicationRunner {
         User user3 = new User("mahbaan77@gmail.com", "123", "Fateme", "Sabagh", "068673055", "876576524", UserType.CUSTOMER, Gender.FEMALE, "11-11-2000");
         User user4 = new User("jon4@gmail.com", "1234", "Jon", "Smith", "092220029", "878651434", UserType.CUSTOMER, Gender.MALE, "21-10-2000");
 
-        Customer customer1= new Customer(user1, CustomerStatus.PENDING);
+        Customer customer1= new Customer(user1, CustomerStatus.APPROVED);
         Customer customer2= new Customer(user2, CustomerStatus.APPROVED);
         Customer customer3 = new Customer(user3, CustomerStatus.APPROVED);
         Customer customer4 = new Customer(user4, CustomerStatus.APPROVED);

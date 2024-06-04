@@ -120,6 +120,7 @@ public class WebSecurityConfiguration {
             requests.requestMatchers("/customers/deposit").permitAll();
             requests.requestMatchers("/customers/withdraw").permitAll();
             requests.requestMatchers("/employees/update-daily-limit").permitAll();
+            requests.requestMatchers("/accounts/{userId}").permitAll();
             // Add more requestMatchers as needed
             requests.anyRequest().authenticated(); // All other requests need to be authenticated
         });
