@@ -92,6 +92,26 @@ public class AccountService {
         accountRepository.save(account);
     }
 
+    public List<AccountsGetDTO> getAccountsByUserId(Long userId) {
+        List<Account> accounts = accountRepository.findByCustomerUserUserId(userId);
+        return accounts.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    private AccountsGetDTO convertToDto(Account account) {
+        return new AccountsGetDTO(
+                account.getAccountId(),
+                account.getCustomer().getCustomerId(),
+                account.getCustomer().getUser().getFirstName() + " " + account.getCustomer().getUser().getLastName(),
+                account.getIBAN(),
+                account.getBalance(),
+                account.getAccountType(),
+                account.getCustomer().getStatus(),
+                account.getAbsoluteLimit(),
+                account.getDailyLimit()
+        );
+    }
+
+
 }
 
 
