@@ -7,6 +7,33 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "BANK_TRANSACTION")
 public class BankTransaction {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setType(TransactionType type) {
+        this.type = type;
+    }
+
+    public void setInitiatedBy(UserType initiatedBy) {
+        this.initiatedBy = initiatedBy;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setFromAccount(Account fromAccount) {
+        this.fromAccount = fromAccount;
+    }
+
+    public void setToAccount(Account toAccount) {
+        this.toAccount = toAccount;
+    }
+
+    public void setTransferAmount(Double transferAmount) {
+        this.transferAmount = transferAmount;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -84,6 +111,13 @@ public class BankTransaction {
 
     public TransactionStatus getStatus() {
         return status;
+    }
+    public void setCurrentTime(LocalDateTime currentTime) {
+        this.currentTime = currentTime;
+    }
+
+    public void setStatus(TransactionStatus status) {
+        this.status = status;
     }
 
 }

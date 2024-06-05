@@ -29,7 +29,7 @@ public class AccountController {
     }
 
     @GetMapping("/employees/customer-accounts")
-    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
     public ResponseEntity<Object> getAllAccounts(){
         return  ResponseEntity.status(200).body(accountService.getAllAccountDetails());
     }
@@ -41,6 +41,8 @@ public class AccountController {
             return ResponseEntity.status(200).body("Daily limit updated successfully.");
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
 
     @GetMapping("/{userId}/account-detail")
     public ResponseEntity<Object> getAccountDetails(@PathVariable Long userId) {
@@ -51,5 +53,6 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 
         }
-    }
+      }
+
 }

@@ -9,7 +9,6 @@ import com.groupfour.bankingapp.Repository.TransactionRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -106,7 +105,9 @@ public class TransactionService {
                         transaction.getStatus()))
                 .collect(Collectors.toList());
     }
-    private double getTotalTransferredAmountToday(Account fromAccount) {
+
+    //test needed
+    protected double getTotalTransferredAmountToday(Account fromAccount) {
         LocalDateTime startOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
         LocalDateTime endOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
 
@@ -135,7 +136,7 @@ public class TransactionService {
         return createBankTransactionPostDTO(fromAccountIban, toAccountIban, transferAmount);
     }
 
-    private void validateDailyLimit(Account fromAccount, double transferAmount) {
+    protected void validateDailyLimit(Account fromAccount, double transferAmount) {
         double totalTransferredToday = getTotalTransferredAmountToday(fromAccount);
         if (totalTransferredToday + transferAmount > fromAccount.getDailyLimit()) {
             throw new IllegalArgumentException("Transfer amount exceeds the daily limit");
@@ -143,23 +144,23 @@ public class TransactionService {
     }
 
 
-    private Account getAccountByIban(String iban) {
+    protected Account getAccountByIban(String iban) {
         return accountRepository.findByIBAN(iban);
     }
 
-    private void validateAccounts(Account fromAccount, Account toAccount) {
+    protected void validateAccounts(Account fromAccount, Account toAccount) {
         if (fromAccount == null || toAccount == null) {
             throw new IllegalArgumentException("Source or destination account not found");
         }
     }
 
-    private void validateSufficientFunds(Account fromAccount, double transferAmount) {
+    protected void validateSufficientFunds(Account fromAccount, double transferAmount) {
         if (fromAccount.getBalance() < transferAmount) {
             throw new IllegalArgumentException("Insufficient funds");
         }
     }
 
-    private void executeTransfer(Account fromAccount, Account toAccount, double transferAmount) {
+    protected void executeTransfer(Account fromAccount, Account toAccount, double transferAmount) {
         fromAccount.setBalance(fromAccount.getBalance() - transferAmount);
         toAccount.setBalance(toAccount.getBalance() + transferAmount);
 
@@ -167,7 +168,7 @@ public class TransactionService {
         accountRepository.save(toAccount);
     }
 
-    private BankTransaction createTransaction(Account fromAccount, Account toAccount, double transferAmount) {
+    protected BankTransaction createTransaction(Account fromAccount, Account toAccount, double transferAmount) {
         User initiator = null;
         try {
             initiator = userService.getCurrentLoggedInUser(request);
@@ -190,7 +191,7 @@ public class TransactionService {
                 TransactionStatus.SUCCESS
         );
     }
-    private BankTransactionPostDTO createBankTransactionPostDTO(String fromAccountIban, String toAccountIban, double transferAmount) {
+    protected BankTransactionPostDTO createBankTransactionPostDTO(String fromAccountIban, String toAccountIban, double transferAmount) {
         return new BankTransactionPostDTO(
                 fromAccountIban,
                 toAccountIban,
