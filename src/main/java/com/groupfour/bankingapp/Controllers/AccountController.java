@@ -19,6 +19,7 @@ public class AccountController {
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
     }
+
     public class AccountNotFoundException extends RuntimeException {
         public AccountNotFoundException(String message) {
             super(message);
