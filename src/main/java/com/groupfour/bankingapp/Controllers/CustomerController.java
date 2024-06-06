@@ -31,7 +31,7 @@ public class CustomerController {
     }
 
     @PutMapping("/employees/customers-without-accounts/{userId}/approve-signup")
-    @PreAuthorize("hasAnyRole('EMPLOYEE')")
+    //@PreAuthorize("hasAnyRole('EMPLOYEE')")
     public ResponseEntity<Object> approveSignup(@PathVariable Long userId, @RequestBody ApproveSignupPutDTO approveSignupPutDTO){
         try {
             customerService.approveSignup(userId, approveSignupPutDTO);

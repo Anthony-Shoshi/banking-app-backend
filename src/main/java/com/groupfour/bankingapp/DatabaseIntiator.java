@@ -48,8 +48,8 @@ public class DatabaseIntiator implements ApplicationRunner {
         Customer customer4 = new Customer(user4, CustomerStatus.APPROVED);
 
 
-        Account Account1 = new Account(customer1, "DE89 3704 0044 0532 0130 14", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
-        Account Account2 = new Account(customer1, "DE89 3704 0044 0532 0130 00", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
+       // Account Account1 = new Account(customer1, "DE89 3704 0044 0532 0130 14", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
+       // Account Account2 = new Account(customer1, "DE89 3704 0044 0532 0130 00", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
         Account Account3 = new Account(customer3, "DE89 3704 0044 0532 0130 12", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
         Account Account4 = new Account(customer4, "DE89 3704 0044 0532 0130 11", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
 
@@ -63,8 +63,8 @@ public class DatabaseIntiator implements ApplicationRunner {
         customerRepository.save(customer3);
         customerRepository.save(customer4);
 
-        accountRepository.save(Account1);
-        accountRepository.save(Account2);
+     //   accountRepository.save(Account1);
+    //    accountRepository.save(Account2);
         accountRepository.save(Account3);
         accountRepository.save(Account4);
 
@@ -85,7 +85,7 @@ public class DatabaseIntiator implements ApplicationRunner {
             System.out.println("User not found with ID: 1234");
         }
 
-        BankTransaction tarnsaction1 = new BankTransaction(TransactionType.DEPOSIT, UserType.CUSTOMER, user1, Account1, Account2, 25.00, LocalDateTime.now(), TransactionStatus.SUCCESS );
+        BankTransaction tarnsaction1 = new BankTransaction(TransactionType.DEPOSIT, UserType.CUSTOMER, user1, Account3, Account4, 25.00, LocalDateTime.now(), TransactionStatus.SUCCESS );
         transactionRepository.save(tarnsaction1);
 
     }
