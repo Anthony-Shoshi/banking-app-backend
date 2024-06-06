@@ -85,10 +85,12 @@ public class AccountService {
         return accountRepository.existsByIBAN(iban);
     }
 
-
-    public List<String> getIbansByCustomerName(String firstName, String lastName) {
-        List<Account> accounts = accountRepository.findByCustomerFirstNameAndLastName(firstName, lastName);
-        return accounts.stream().map(Account::getIBAN).collect(Collectors.toList());
+    public String getCurrentAccountIbanByCustomerName(String firstName, String lastName) {
+        String iban = accountRepository.findCurrentAccountIbanByCustomerName(firstName, lastName);
+        if (iban == null) {
+            throw new IllegalArgumentException("No current account found for the given customer name");
+        }
+        return iban;
     }
 
     public void updateDailyLimit(Long accountId, double dailyLimit) throws RuntimeException {
