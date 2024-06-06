@@ -239,100 +239,102 @@ public class TransactionService {
                 transaction.getCurrentTime().toString(),
                 transaction.getStatus()
         );
+    }
 
         //test needed
-    protected double getTotalTransferredAmountToday(Account fromAccount){
+        protected double getTotalTransferredAmountToday (Account fromAccount){
             LocalDateTime startOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
             LocalDateTime endOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
 
-            List<BankTransaction> todayTransactions = transactionRepository.findByFromAccountAndCurrentTimeBetween(
+            List<BankTransaction> todayTransactions = transactionRepository.findByFromAccountAndCurrentTimingBetween(
                     fromAccount, startOfDay, endOfDay);
 
             return todayTransactions.stream()
                     .mapToDouble(BankTransaction::getTransferAmount)
                     .sum();
         }
-    }
-    
 
-    @Transactional
-    public BankTransactionPostDTO transferMoney(String fromAccountIban, String toAccountIban, double transferAmount) {
-        Account fromAccount = getAccountByIban(fromAccountIban);
-        Account toAccount = getAccountByIban(toAccountIban);
 
-        validateAccounts(fromAccount, toAccount);
-        validateSufficientFunds(fromAccount, transferAmount);
-        validateDailyLimit(fromAccount, transferAmount);
+        @Transactional
+        public BankTransactionPostDTO transferMoney (String fromAccountIban, String toAccountIban,double transferAmount)
+        {
+            Account fromAccount = getAccountByIban(fromAccountIban);
+            Account toAccount = getAccountByIban(toAccountIban);
 
-        executeTransfer(fromAccount, toAccount, transferAmount);
+            validateAccounts(fromAccount, toAccount);
+            validateSufficientFunds(fromAccount, transferAmount);
+            validateDailyLimit(fromAccount, transferAmount);
 
-        BankTransaction transaction = createTransaction(fromAccount, toAccount, transferAmount);
-        transactionRepository.save(transaction);
+            executeTransfer(fromAccount, toAccount, transferAmount);
 
-        return createBankTransactionPostDTO(fromAccountIban, toAccountIban, transferAmount);
-    }
+            BankTransaction transaction = createTransaction(fromAccount, toAccount, transferAmount);
+            transactionRepository.save(transaction);
 
-    protected void validateDailyLimit(Account fromAccount, double transferAmount) {
-        double totalTransferredToday = getTotalTransferredAmountToday(fromAccount);
-        if (totalTransferredToday + transferAmount > fromAccount.getDailyLimit()) {
-            throw new IllegalArgumentException("Transfer amount exceeds the daily limit");
+            return createBankTransactionPostDTO(fromAccountIban, toAccountIban, transferAmount);
         }
-    }
 
-
-    protected Account getAccountByIban(String iban) {
-        return accountRepository.findByIBAN(iban);
-    }
-
-    protected void validateAccounts(Account fromAccount, Account toAccount) {
-        if (fromAccount == null || toAccount == null) {
-            throw new IllegalArgumentException("Source or destination account not found");
-        }
-    }
-
-    protected void validateSufficientFunds(Account fromAccount, double transferAmount) {
-        if (fromAccount.getBalance() < transferAmount) {
-            throw new IllegalArgumentException("Insufficient funds");
-        }
-    }
-
-    protected void executeTransfer(Account fromAccount, Account toAccount, double transferAmount) {
-        fromAccount.setBalance(fromAccount.getBalance() - transferAmount);
-        toAccount.setBalance(toAccount.getBalance() + transferAmount);
-
-        accountRepository.save(fromAccount);
-        accountRepository.save(toAccount);
-    }
-
-    protected BankTransaction createTransaction(Account fromAccount, Account toAccount, double transferAmount) {
-        User initiator = null;
-        try {
-            initiator = userService.getCurrentLoggedInUser(request);
-            if (initiator == null) {
-                throw new NullPointerException("Initiator is null");
+        protected void validateDailyLimit (Account fromAccount,double transferAmount){
+            double totalTransferredToday = getTotalTransferredAmountToday(fromAccount);
+            if (totalTransferredToday + transferAmount > fromAccount.getDailyLimit()) {
+                throw new IllegalArgumentException("Transfer amount exceeds the daily limit");
             }
-        } catch (Exception e) {
-            System.err.println("Failed to create transaction: " + e.getMessage());
-            return null;
         }
 
-        return new BankTransaction(
-                TransactionType.TRANSFER,
-                UserType.EMPLOYEE,
-                initiator,
-                fromAccount,
-                toAccount,
-                transferAmount,
-                LocalDateTime.now(),
-                TransactionStatus.SUCCESS
-        );
-    }
-    protected BankTransactionPostDTO createBankTransactionPostDTO(String fromAccountIban, String toAccountIban, double transferAmount) {
-        return new BankTransactionPostDTO(
-                fromAccountIban,
-                toAccountIban,
-                transferAmount
-        );
+
+        protected Account getAccountByIban (String iban){
+            return accountRepository.findByIBAN(iban);
+        }
+
+        protected void validateAccounts (Account fromAccount, Account toAccount){
+            if (fromAccount == null || toAccount == null) {
+                throw new IllegalArgumentException("Source or destination account not found");
+            }
+        }
+
+        protected void validateSufficientFunds (Account fromAccount,double transferAmount){
+            if (fromAccount.getBalance() < transferAmount) {
+                throw new IllegalArgumentException("Insufficient funds");
+            }
+        }
+
+        protected void executeTransfer (Account fromAccount, Account toAccount,double transferAmount){
+            fromAccount.setBalance(fromAccount.getBalance() - transferAmount);
+            toAccount.setBalance(toAccount.getBalance() + transferAmount);
+
+            accountRepository.save(fromAccount);
+            accountRepository.save(toAccount);
+        }
+
+        protected BankTransaction createTransaction (Account fromAccount, Account toAccount,double transferAmount){
+            User initiator = null;
+            try {
+                initiator = userService.getCurrentLoggedInUser(request);
+                if (initiator == null) {
+                    throw new NullPointerException("Initiator is null");
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to create transaction: " + e.getMessage());
+                return null;
+            }
+
+            return new BankTransaction(
+                    TransactionType.TRANSFER,
+                    UserType.EMPLOYEE,
+                    initiator,
+                    fromAccount,
+                    toAccount,
+                    transferAmount,
+                    LocalDateTime.now(),
+                    TransactionStatus.SUCCESS
+            );
+        }
+        protected BankTransactionPostDTO createBankTransactionPostDTO (String fromAccountIban, String toAccountIban,
+        double transferAmount){
+            return new BankTransactionPostDTO(
+                    fromAccountIban,
+                    toAccountIban,
+                    transferAmount
+            );
+        }
     }
 
-}
