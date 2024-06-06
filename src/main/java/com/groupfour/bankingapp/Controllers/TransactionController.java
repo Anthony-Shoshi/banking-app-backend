@@ -27,7 +27,7 @@ import java.util.Optional;
 @RestController
 @ControllerAdvice
 @Log
-//@RequestMapping("/transactions")
+
 public class TransactionController {
 
     private final TransactionService transactionService;

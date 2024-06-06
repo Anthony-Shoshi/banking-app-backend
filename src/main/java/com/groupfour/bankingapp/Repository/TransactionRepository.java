@@ -17,7 +17,7 @@ public interface TransactionRepository extends JpaRepository<BankTransaction, Lo
 
     List<BankTransaction> findAll(Specification<BankTransaction> specification, Pageable pageable);
     List<BankTransaction> findByFromAccountCustomerCustomerId(Long customerId);
-
+    List<BankTransaction> findByFromAccountAndCurrentTimeBetween(Account fromAccount, LocalDateTime start, LocalDateTime end);
     @Query("SELECT t FROM BankTransaction t " +
             "WHERE (:customerId IS NULL OR t.fromAccount.customer.customerId = :customerId) " +
             "AND (:startDate IS NULL OR t.currentTime >= :startDate) " +

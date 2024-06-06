@@ -50,7 +50,7 @@ public class DatabaseIntiator implements ApplicationRunner {
 
         Account Account1 = new Account(customer1, "DE89 3704 0044 0532 0130 14", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
         Account Account2 = new Account(customer1, "DE89 3704 0044 0532 0130 00", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
-        Account Account3 = new Account(customer3, "DE89 3704 0044 0532 0130 12", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
+        Account Account3 = new Account(customer3, "DE89 3704 0044 0532 0130 12", 100.00, 00.00, AccountType.CURRENT, true, 50.00, AccountStatus.ACTIVE, "€");
         Account Account4 = new Account(customer4, "DE89 3704 0044 0532 0130 11", 100.00, 00.00, AccountType.SAVING, true, 50.00, AccountStatus.ACTIVE, "€");
 
         userRepository.save(user1);
@@ -68,24 +68,56 @@ public class DatabaseIntiator implements ApplicationRunner {
         accountRepository.save(Account3);
         accountRepository.save(Account4);
 
+
+
+//        BankTransaction tarnsaction1 = new BankTransaction(TransactionType.DEPOSIT, UserType.CUSTOMER, user1, Account1, Account2, 25.00, LocalDateTime.now(), TransactionStatus.SUCCESS );
+//        transactionRepository.save(tarnsaction1);
+//
+//        if (user3 != null) {
+//            BankTransaction tarnsaction2 = new BankTransaction(
+//                    TransactionType.DEPOSIT,
+//                    UserType.CUSTOMER,
+//                    user3,
+//                    Account3,
+//                    Account4,
+//                    1000.00, // Transfer Amount
+//                    LocalDateTime.now(),
+//                    TransactionStatus.SUCCESS
+//            );
+//            transactionRepository.save(tarnsaction2);
+//        } else {
+//            System.out.println("User not found with ID: 1234");
+//        }
+//
+//    }
+        LocalDateTime specificTime = LocalDateTime.of(2023, 6, 1, 10, 30);
+
+        BankTransaction transaction1 = new BankTransaction(
+                TransactionType.DEPOSIT,
+                UserType.CUSTOMER,
+                user1,
+                Account1,
+                Account2,
+                25.00,
+                specificTime,
+                TransactionStatus.SUCCESS
+        );
+        transactionRepository.save(transaction1);
+
         if (user3 != null) {
-            BankTransaction tarnsaction2 = new BankTransaction(
+            BankTransaction transaction2 = new BankTransaction(
                     TransactionType.DEPOSIT,
                     UserType.CUSTOMER,
                     user3,
                     Account3,
                     Account4,
                     1000.00, // Transfer Amount
-                    LocalDateTime.now(),
+                    specificTime,
                     TransactionStatus.SUCCESS
             );
-            transactionRepository.save(tarnsaction2);
+            transactionRepository.save(transaction2);
         } else {
             System.out.println("User not found with ID: 1234");
         }
-
-        BankTransaction tarnsaction1 = new BankTransaction(TransactionType.DEPOSIT, UserType.CUSTOMER, user1, Account1, Account2, 25.00, LocalDateTime.now(), TransactionStatus.SUCCESS );
-        transactionRepository.save(tarnsaction1);
-
     }
 }

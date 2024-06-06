@@ -4,12 +4,19 @@ package com.groupfour.bankingapp.Controllers;
 import com.groupfour.bankingapp.Models.DTO.AccountPutDTO;
 import com.groupfour.bankingapp.Models.DTO.AccountsGetDTO;
 import com.groupfour.bankingapp.Services.AccountService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+
+import javax.security.auth.login.AccountNotFoundException;
 
 
 import java.util.List;
@@ -22,12 +29,18 @@ public class AccountController {
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
     }
+    public class AccountNotFoundException extends RuntimeException {
+        public AccountNotFoundException(String message) {
+            super(message);
+        }
+    }
 
     @GetMapping("/employees/customer-accounts")
-    //@PreAuthorize("hasAnyRole('ROLE_EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
     public ResponseEntity<Object> getAllAccounts(){
         return  ResponseEntity.status(200).body(accountService.getAllAccountDetails());
     }
+
 
 
     @GetMapping("/customers/search-iban")
@@ -37,6 +50,7 @@ public class AccountController {
         List<String> ibans = accountService.getIbansByCustomerName(firstName, lastName);
         return ResponseEntity.ok(ibans);
     }
+
 
     @PutMapping("/employees/update-daily-limit")
     public ResponseEntity<Object> updateDailyLimit(@RequestBody AccountPutDTO accountPutDTO) {
@@ -54,4 +68,16 @@ public class AccountController {
         List<AccountsGetDTO> accounts = accountService.getAccountsByUserId(userId);
         return ResponseEntity.ok(accounts);
     }
+
+    @GetMapping("/{userId}/account-detail")
+    public ResponseEntity<Object> getAccountDetails(@PathVariable Long userId) {
+        try {
+            Object accountDetails = accountService.getAccountDetails(userId);
+            return ResponseEntity.ok(accountDetails);
+        } catch (AccountNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+
+        }
+      }
+
 }
