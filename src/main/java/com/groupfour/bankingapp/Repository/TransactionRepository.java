@@ -17,7 +17,7 @@ public interface TransactionRepository extends JpaRepository<BankTransaction, Lo
 
     List<BankTransaction> findAll(Specification<BankTransaction> specification, Pageable pageable);
     List<BankTransaction> findByFromAccountCustomerCustomerId(Long customerId);
-    List<BankTransaction> findByFromAccountAndCurrentTimingBetween(Account fromAccount, LocalDateTime start, LocalDateTime end);
+    List<BankTransaction> findByFromAccountAndCurrentTimeBetween(Account fromAccount, LocalDateTime start, LocalDateTime end);
     @Query("SELECT t FROM BankTransaction t " +
             "WHERE (:customerId IS NULL OR t.fromAccount.customer.customerId = :customerId) " +
             "AND (:startDate IS NULL OR t.currentTime >= :startDate) " +
@@ -33,12 +33,12 @@ public interface TransactionRepository extends JpaRepository<BankTransaction, Lo
             @Param("toAmount") Double toAmount,
             @Param("iban") String iban);
 
-    @Query("SELECT bt FROM BankTransaction bt WHERE bt.fromAccount = :account AND bt.currentTime BETWEEN :startOfDay AND :endOfDay")
-    List<BankTransaction> findByFromAccountAndCurrentTimeBetween(
-            @Param("account") Account account,
-            @Param("startOfDay") LocalDateTime startOfDay,
-            @Param("endOfDay") LocalDateTime endOfDay
-    );
+//    @Query("SELECT bt FROM BankTransaction bt WHERE bt.fromAccount = :account AND bt.currentTime BETWEEN :startOfDay AND :endOfDay")
+//    List<BankTransaction> findByFromAccountAndCurrentTimeBetween(
+//            @Param("account") Account account,
+//            @Param("startOfDay") LocalDateTime startOfDay,
+//            @Param("endOfDay") LocalDateTime endOfDay
+//    );
 }
 
 

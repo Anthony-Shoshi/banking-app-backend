@@ -246,7 +246,7 @@ public class TransactionService {
             LocalDateTime startOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
             LocalDateTime endOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
 
-            List<BankTransaction> todayTransactions = transactionRepository.findByFromAccountAndCurrentTimingBetween(
+            List<BankTransaction> todayTransactions = transactionRepository.findByFromAccountAndCurrentTimeBetween(
                     fromAccount, startOfDay, endOfDay);
 
             return todayTransactions.stream()
