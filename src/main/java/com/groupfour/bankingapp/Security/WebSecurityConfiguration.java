@@ -11,6 +11,12 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
@@ -27,40 +33,38 @@ WebSecurityConfiguration {
     }
 
     @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
 
         http.sessionManagement(
                 session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
+                cors(cors -> cors.configurationSource(corsConfigurationSource()));
         http.authorizeHttpRequests(
-                requests ->
-                        requests.requestMatchers("/login").permitAll());
-    http.authorizeHttpRequests(
-                requests ->
-                        requests.requestMatchers("/employees/customer-accounts").permitAll());
-        http.authorizeHttpRequests(
-                requests ->
-                        requests.requestMatchers("/h2-console/**").permitAll());
-        http.authorizeHttpRequests(
-                requests ->
-                        requests.requestMatchers("/transactions").permitAll());
-        http.authorizeHttpRequests(
-                requests ->
-                        requests.requestMatchers("/employees/customers-without-accounts").permitAll());
-        http.authorizeHttpRequests(
-                requests ->
-                        requests.requestMatchers("/employees/customers-without-accounts/{userId}/approve-signup").permitAll());
-        http.authorizeHttpRequests(
-                requests ->
-                        requests.requestMatchers("/customers/{customerId}/transactions").permitAll());
-        http.authorizeHttpRequests(
-                requests ->
-                        requests.requestMatchers("/account-detail").permitAll());
-
-        http.authorizeHttpRequests(requests -> requests
-                .requestMatchers("/register/**").permitAll()
-                .anyRequest().authenticated());
+                authorize ->authorize
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/employees/customer-accounts").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/transactions").permitAll()
+                        .requestMatchers("/employees/customers-without-accounts").permitAll()
+                        .requestMatchers("/employees/customers-without-accounts/{userId}/approve-signup").permitAll()
+                        .requestMatchers("/customers/{customerId}/transactions").permitAll()
+                        .requestMatchers("/account-detail").permitAll()
+                        .requestMatchers("/register/**").permitAll()
+                        .anyRequest().authenticated());
 
         http.addFilterBefore(jwtFilter,
                 UsernamePasswordAuthenticationFilter.class);

@@ -37,7 +37,7 @@ public class TransactionController {
 
     @GetMapping("/transactions")
     public ResponseEntity<Object> getAllTransactions() {
-
+        List<BankTransactionDTO> transactions = transactionService.getAllTransactions();
         try{
             return ResponseEntity.status(200).body(transactionService.getAllTransactions());
 
@@ -48,6 +48,7 @@ public class TransactionController {
         }
 
     }
+
     @GetMapping("/customers/{customerId}/transactions")
     public ResponseEntity<List<BankTransactionDTO>> getTransactionsByCustomerId(@PathVariable Long customerId) {
         Optional<List<BankTransactionDTO>> transactions = transactionService.getTransactionsByCustomerId(customerId);
