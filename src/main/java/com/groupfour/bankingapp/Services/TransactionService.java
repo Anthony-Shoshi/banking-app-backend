@@ -240,7 +240,7 @@ public class TransactionService {
                 transaction.getStatus()
         );
 
-    //test needed
+        //test needed
     protected double getTotalTransferredAmountToday(Account fromAccount){
             LocalDateTime startOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
             LocalDateTime endOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
@@ -253,6 +253,7 @@ public class TransactionService {
                     .sum();
         }
     }
+    
 
     @Transactional
     public BankTransactionPostDTO transferMoney(String fromAccountIban, String toAccountIban, double transferAmount) {
