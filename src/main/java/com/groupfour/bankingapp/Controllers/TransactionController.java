@@ -85,10 +85,6 @@ public class TransactionController {
         LocalDate start = (startDate != null && !startDate.isEmpty()) ? LocalDate.parse(startDate) : null;
         LocalDate end = (endDate != null && !endDate.isEmpty()) ? LocalDate.parse(endDate) : null;
 
-        System.out.println("CustomerId: " + customerId);
-        System.out.println("StartDate: " + start);
-        System.out.println("EndDate: " + end);
-
         List<BankTransactionDTO> transactions = transactionService.getTransactionHistory(customerId, start, end, fromAmount, toAmount, iban);
         return ResponseEntity.ok(transactions);
     }

@@ -1,6 +1,7 @@
 package com.groupfour.bankingapp.Controllers;
 
 
+import com.groupfour.bankingapp.Models.Account;
 import com.groupfour.bankingapp.Models.DTO.AccountPutDTO;
 import com.groupfour.bankingapp.Models.DTO.AccountsGetDTO;
 import com.groupfour.bankingapp.Services.AccountService;
@@ -12,7 +13,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class AccountController {
@@ -31,11 +34,17 @@ public class AccountController {
 
 
     @GetMapping("/customers/search-iban")
-    public ResponseEntity<List<String>> getIbansByCustomerName(
+    public ResponseEntity<Object> getIbansByCustomerName(
             @RequestParam(name = "firstName") String firstName,
             @RequestParam(name = "lastName") String lastName) {
-        List<String> ibans = accountService.getIbansByCustomerName(firstName, lastName);
-        return ResponseEntity.ok(ibans);
+        try {
+            String iban = accountService.getCurrentAccountIbanByCustomerName(firstName, lastName);
+            Map<String, String> response = new HashMap<>();
+            response.put("iban", iban);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
     }
 
     @PutMapping("/employees/update-daily-limit")
