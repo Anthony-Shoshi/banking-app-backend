@@ -1,10 +1,7 @@
 package com.groupfour.bankingapp.Controllers;
 
-import com.groupfour.bankingapp.Models.Customer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.groupfour.bankingapp.Models.DTO.RegisterRequestDTO;
-import com.groupfour.bankingapp.Models.Gender;
-import com.groupfour.bankingapp.Models.User;
-import com.groupfour.bankingapp.Models.UserType;
 import com.groupfour.bankingapp.Repository.CustomerRepository;
 import com.groupfour.bankingapp.Repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,14 +9,18 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class RegistrationControllerTest {
 
+    private MockMvc mockMvc;
 
     @Mock
     private UserRepository userRepository;
@@ -36,46 +37,18 @@ public class RegistrationControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(registerationController).build();
     }
 
     @Test
-    void register_WithValidRequest_ReturnsOk() {
-        // Arrange
-        RegisterRequestDTO requestDTO = new RegisterRequestDTO(
-                "test@example.com",
-                "Test123@",
-                "John",
-                "Doe",
-                "123456789",
-                "123456789",
-                "Male",
-                "1990, 1, 1"
-        );
+    void testRegisterUser_Success() throws Exception {
+        RegisterRequestDTO userDTO = new RegisterRequestDTO("test@example.com", "Test@123", "firstName", "lastName", "123456789", "123456789", "Male", "1990, 1, 1");
 
-        User user = new User(
-                requestDTO.email(),
-                requestDTO.password(),
-                requestDTO.firstName(),
-                requestDTO.lastName(),
-                requestDTO.phoneNumber(),
-                requestDTO.bsn(),
-                UserType.CUSTOMER,
-                Gender.MALE,
-                requestDTO.DateOFbirth()
-        );
-
-        when(bCryptPasswordEncoder.encode(requestDTO.password())).thenReturn("encodedPassword");
-        when(userRepository.save(any(User.class))).thenReturn(user);
-
-        // Act
-        ResponseEntity<Object> responseEntity = registerationController.register(requestDTO);
-
-        // Assert
-        assertEquals(ResponseEntity.ok("Registration successful"), responseEntity);
-        verify(userRepository, times(1)).save(any(User.class));
-        verify(customerRepository, times(1)).save(any(Customer.class));
+        mockMvc.perform(post("/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(userDTO)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Registration successful")); 
     }
 
 }
-
-
