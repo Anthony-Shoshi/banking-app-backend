@@ -109,54 +109,6 @@ public class TransactionService {
                 .collect(Collectors.toList());
     }
 
-//    @Transactional
-//    public BankTransaction deposit(TransactionRequestDTO request) {
-//        Account account = accountRepository.findById(request.getAccountId())
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid account ID"));
-//
-//        account.setBalance(account.getBalance() + request.getAmount());
-//        accountRepository.save(account);
-//
-//        BankTransaction transaction = new BankTransaction(
-//                TransactionType.DEPOSIT,
-//                UserType.CUSTOMER,
-//                account.getCustomer().getUser(),
-//                account,
-//                null,
-//                request.getAmount(),
-//                LocalDateTime.now(),
-//                TransactionStatus.SUCCESS
-//        );
-//
-//        return transactionRepository.save(transaction);
-//    }
-//
-//    @Transactional
-//    public BankTransaction withdraw(TransactionRequestDTO request) {
-//        Account account = accountRepository.findById(request.getAccountId())
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid account ID"));
-//
-//        if (account.getBalance() < request.getAmount()) {
-//            throw new IllegalArgumentException("Insufficient funds");
-//        }
-//
-//        account.setBalance(account.getBalance() - request.getAmount());
-//        accountRepository.save(account);
-//
-//        BankTransaction transaction = new BankTransaction(
-//                TransactionType.WITHDRAW,
-//                UserType.CUSTOMER,
-//                account.getCustomer().getUser(),
-//                account,
-//                null,
-//                request.getAmount(),
-//                LocalDateTime.now(),
-//                TransactionStatus.SUCCESS
-//        );
-//
-//        return transactionRepository.save(transaction);
-//    }
-
     @Transactional
     public BankTransactionDTO deposit(TransactionRequestDTO request) {
         Account account = accountRepository.findById(request.getAccountId())

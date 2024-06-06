@@ -7,15 +7,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AccountRepository extends JpaRepository <Account, Long>{
     boolean existsByIBAN(String iban);
 
-
-    @Query("SELECT a FROM Account a WHERE a.customer.user.firstName = :firstName AND a.customer.user.lastName = :lastName")
-    List<Account> findByCustomerFirstNameAndLastName(@Param("firstName") String firstName, @Param("lastName") String lastName);
-
+    @Query("SELECT a.IBAN FROM Account a WHERE a.customer.user.firstName = :firstName AND a.customer.user.lastName = :lastName AND a.accountType = com.groupfour.bankingapp.Models.AccountType.CURRENT")
+    String findCurrentAccountIbanByCustomerName(@Param("firstName") String firstName, @Param("lastName") String lastName);
 
     Account findByIBAN(String iban);
 
