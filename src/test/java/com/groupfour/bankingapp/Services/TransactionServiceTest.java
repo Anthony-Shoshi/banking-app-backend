@@ -139,12 +139,12 @@ public class TransactionServiceTest {
     void testGetAllTransactions() {
         // Mock data
         List<BankTransaction> transactions = new ArrayList<>();
-        User user = new User("john@example.com", "password123", "John", "Doe", "1234567890", "123456789", UserType.CUSTOMER, Gender.MALE, "1990-01-01");
+        User user = new User("john@example.com", "password123", "John", "Doe", "1234567890", "123456789", UserType.ROLE_CUSTOMER, Gender.MALE, "1990-01-01");
         Customer customer = new Customer(user, CustomerStatus.APPROVED);
         Account fromAccount = new Account(customer, "from_iban", 1000.0, 5000.0, AccountType.CURRENT, true, 1000.0, AccountStatus.ACTIVE, "USD");
         Account toAccount = new Account(customer, "to_iban", 2000.0, 5000.0, AccountType.SAVING, true, 1000.0, AccountStatus.ACTIVE, "USD");
-        BankTransaction transaction1 = new BankTransaction(TransactionType.DEPOSIT, UserType.CUSTOMER, user, fromAccount, toAccount, 500.0, LocalDateTime.now(), TransactionStatus.SUCCESS);
-        BankTransaction transaction2 = new BankTransaction(TransactionType.WITHDRAW, UserType.EMPLOYEE, user, fromAccount, toAccount, 200.0, LocalDateTime.now(), TransactionStatus.FAILED);
+        BankTransaction transaction1 = new BankTransaction(TransactionType.DEPOSIT, UserType.ROLE_CUSTOMER, user, fromAccount, toAccount, 500.0, LocalDateTime.now(), TransactionStatus.SUCCESS);
+        BankTransaction transaction2 = new BankTransaction(TransactionType.WITHDRAW, UserType.ROLE_EMPLOYEE, user, fromAccount, toAccount, 200.0, LocalDateTime.now(), TransactionStatus.FAILED);
         transactions.add(transaction1);
         transactions.add(transaction2);
 
@@ -157,7 +157,7 @@ public class TransactionServiceTest {
         // Assertions
         assertEquals(2, result.size());
         assertEquals(TransactionType.DEPOSIT, result.get(0).type());
-        assertEquals(UserType.CUSTOMER, result.get(0).initiatedBy());
+        assertEquals(UserType.ROLE_CUSTOMER, result.get(0).initiatedBy());
         assertEquals("John", result.get(0).firstName());
         assertEquals("Doe", result.get(0).lastName());
         assertEquals("from_iban", result.get(0).fromAccountIban());
@@ -170,12 +170,12 @@ public class TransactionServiceTest {
         // Mock data
         Long customerId = 1L;
         List<BankTransaction> transactions = new ArrayList<>();
-        User user = new User("john@example.com", "password123", "John", "Doe", "1234567890", "123456789", UserType.CUSTOMER, Gender.MALE, "1990-01-01");
+        User user = new User("john@example.com", "password123", "John", "Doe", "1234567890", "123456789", UserType.ROLE_CUSTOMER, Gender.MALE, "1990-01-01");
         Customer customer = new Customer(user, CustomerStatus.APPROVED);
         Account fromAccount = new Account(customer, "from_iban", 1000.0, 5000.0, AccountType.CURRENT, true, 1000.0, AccountStatus.ACTIVE, "USD");
         Account toAccount = new Account(customer, "to_iban", 2000.0, 5000.0, AccountType.SAVING, true, 1000.0, AccountStatus.ACTIVE, "USD");
-        BankTransaction transaction1 = new BankTransaction(TransactionType.DEPOSIT, UserType.CUSTOMER, user, fromAccount, toAccount, 500.0, LocalDateTime.now(), TransactionStatus.SUCCESS);
-        BankTransaction transaction2 = new BankTransaction(TransactionType.WITHDRAW, UserType.EMPLOYEE, user, fromAccount, toAccount, 200.0, LocalDateTime.now(), TransactionStatus.SUCCESS);
+        BankTransaction transaction1 = new BankTransaction(TransactionType.DEPOSIT, UserType.ROLE_CUSTOMER, user, fromAccount, toAccount, 500.0, LocalDateTime.now(), TransactionStatus.SUCCESS);
+        BankTransaction transaction2 = new BankTransaction(TransactionType.WITHDRAW, UserType.ROLE_EMPLOYEE, user, fromAccount, toAccount, 200.0, LocalDateTime.now(), TransactionStatus.SUCCESS);
         transactions.add(transaction1);
         transactions.add(transaction2);
 
@@ -197,9 +197,9 @@ public class TransactionServiceTest {
         Account fromAccount = new Account();
         fromAccount.setIBAN("from_iban");
         List<BankTransaction> transactions = new ArrayList<>();
-        transactions.add(new BankTransaction(TransactionType.DEPOSIT, UserType.CUSTOMER, new User(), fromAccount, new Account(), 500.0, LocalDateTime.now(), TransactionStatus.SUCCESS));
-        transactions.add(new BankTransaction(TransactionType.WITHDRAW, UserType.CUSTOMER, new User(), fromAccount, new Account(), 200.0, LocalDateTime.now(), TransactionStatus.SUCCESS));
-        transactions.add(new BankTransaction(TransactionType.DEPOSIT, UserType.CUSTOMER, new User(), fromAccount, new Account(), 300.0, LocalDateTime.now().minusDays(1), TransactionStatus.SUCCESS));
+        transactions.add(new BankTransaction(TransactionType.DEPOSIT, UserType.ROLE_CUSTOMER, new User(), fromAccount, new Account(), 500.0, LocalDateTime.now(), TransactionStatus.SUCCESS));
+        transactions.add(new BankTransaction(TransactionType.WITHDRAW, UserType.ROLE_CUSTOMER, new User(), fromAccount, new Account(), 200.0, LocalDateTime.now(), TransactionStatus.SUCCESS));
+        transactions.add(new BankTransaction(TransactionType.DEPOSIT, UserType.ROLE_CUSTOMER, new User(), fromAccount, new Account(), 300.0, LocalDateTime.now().minusDays(1), TransactionStatus.SUCCESS));
 
         // Mock behavior of transactionRepository.findByFromAccountAndCurrentTimeBetween
         when(transactionRepository.findByFromAccountAndCurrentTimeBetween(
