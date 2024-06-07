@@ -137,7 +137,7 @@ public class TransactionService {
 
         BankTransaction transaction = new BankTransaction(
                 TransactionType.DEPOSIT,
-                UserType.CUSTOMER,
+                UserType.ROLE_CUSTOMER,
                 account.getCustomer().getUser(),
                 account,
                 account,
@@ -170,7 +170,7 @@ public class TransactionService {
 
         BankTransaction transaction = new BankTransaction(
                 TransactionType.WITHDRAW,
-                UserType.CUSTOMER,
+                UserType.ROLE_CUSTOMER,
                 account.getCustomer().getUser(),
                 account,
                 account,
