@@ -127,7 +127,7 @@ public class TransactionService {
                 UserType.CUSTOMER,
                 account.getCustomer().getUser(),
                 account,
-                null,
+                account,
                 request.getAmount(),
                 LocalDateTime.now(),
                 TransactionStatus.SUCCESS
@@ -160,7 +160,7 @@ public class TransactionService {
                 UserType.CUSTOMER,
                 account.getCustomer().getUser(),
                 account,
-                null,
+                account,
                 request.getAmount(),
                 LocalDateTime.now(),
                 TransactionStatus.SUCCESS
