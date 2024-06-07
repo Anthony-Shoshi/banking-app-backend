@@ -1,10 +1,6 @@
 package com.groupfour.bankingapp.Security;
 
-import com.groupfour.bankingapp.Config.BeanFactory;
 import com.groupfour.bankingapp.Models.UserType;
-import com.groupfour.bankingapp.Security.UserDetailsServiceImpl;
-import com.groupfour.bankingapp.Models.UserType;
-import com.groupfour.bankingapp.Security.JwtKeyProvider;
 import io.jsonwebtoken.*;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,20 +9,19 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
 
     @Value("${application.token.validity}")
-    private long validityInMicroseconds;
+    private long validityInMilliseconds;
+
     private final JwtKeyProvider jwtKeyProvider;
     @Value("${application.token.secret}")
     private String secret;
@@ -56,17 +51,20 @@ public class JwtTokenProvider {
         }
     }
 
-    public JwtTokenProvider( JwtKeyProvider jwtKeyProvider) {
+    public JwtTokenProvider(JwtKeyProvider jwtKeyProvider) {
         this.jwtKeyProvider = jwtKeyProvider;
     }
 
-    public String createToken(Long userId, UserType type, Boolean isApproved) {
+    public String createToken(String firstName, String lastName, String email, Long userId, UserType type, Boolean isApproved) {
         Claims claims = Jwts.claims().setSubject(String.valueOf(userId));
+        claims.put("firstName", firstName);
+        claims.put("lastName", lastName);
+        claims.put("email", email);
         claims.put("auth", type.name());
-        claims.put("approved", String.valueOf(isApproved));
+        claims.put("approved", isApproved);
 
         Date now = new Date();
-        Date expiration = new Date(now.getTime() + validityInMicroseconds);
+        Date expiration = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()
                 .setClaims(claims)

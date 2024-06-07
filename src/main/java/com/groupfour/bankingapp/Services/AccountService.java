@@ -119,6 +119,22 @@ public class AccountService {
         );
     }
 
+   /* public Object getAccountDetails(Long userId) throws RuntimeException {
+        return accountRepository.findAccountsByCustomerId(userId).stream()
+                .map(account -> new AccountsGetDTO(
+                        account.getAccountId(),
+                        account.getCustomer().getCustomerId(),
+                        account.getCustomer().getUser().getFirstName(),
+                        account.getIBAN(),
+                        account.getBalance(),
+                        account.getAccountType(),
+                        account.getCustomer().getStatus(),
+                        account.getAbsoluteLimit(),
+                        account.getDailyLimit())
+                )
+                .collect(Collectors.toList());
+    }*/
+
     public Object getAccountDetails(Long userId) throws AccountController.AccountNotFoundException {
         List<Account> accounts = accountRepository.findByCustomerId(userId);
         if (accounts.isEmpty()) {

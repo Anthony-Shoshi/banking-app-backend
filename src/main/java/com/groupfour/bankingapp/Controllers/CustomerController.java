@@ -22,6 +22,7 @@ public class CustomerController {
     }
 
     @GetMapping("/employees/customers-without-accounts")
+    //@PreAuthorize("hasAnyRole('EMPLOYEE')")
     public ResponseEntity<Object> getCustomersWithoutAccounts() {
         List<CustomerGetWithOutAccountDTO> customers = customerService.getCustomersWithoutAccounts();
         if (customers.isEmpty()) {
@@ -31,7 +32,7 @@ public class CustomerController {
     }
 
     @PutMapping("/employees/customers-without-accounts/{userId}/approve-signup")
-    @PreAuthorize("hasAnyRole('EMPLOYEE')")
+    //@PreAuthorize("hasAnyRole('EMPLOYEE')")
     public ResponseEntity<Object> approveSignup(@PathVariable Long userId, @RequestBody ApproveSignupPutDTO approveSignupPutDTO){
         try {
             customerService.approveSignup(userId, approveSignupPutDTO);

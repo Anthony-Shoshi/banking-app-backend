@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @Component
-@Order(2)
+//@Order(2)
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtProvider;

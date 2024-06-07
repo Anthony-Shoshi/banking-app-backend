@@ -38,10 +38,10 @@ public class DatabaseIntiator implements ApplicationRunner {
     private void initiator(){
 
 
-        User user1 = new User("user@gmail.com", bCryptPasswordEncoder.encode("123"), "Ador","Negash", "092200293", "242656789", UserType.CUSTOMER ,Gender.MALE, "11-11-2000");
-        User user2 = new User("faizan@gmail.com", bCryptPasswordEncoder.encode("2345"), "Muhammad","Faizan", "067875453", "765569753", UserType.EMPLOYEE ,Gender.MALE, "21-10-2003");
-        User user3 = new User("mahbaan77@gmail.com", "123", "Fateme", "Sabagh", "068673055", "876576524", UserType.CUSTOMER, Gender.FEMALE, "11-11-2000");
-        User user4 = new User("jon4@gmail.com", "1234", "Jon", "Smith", "092220029", "878651434", UserType.CUSTOMER, Gender.MALE, "21-10-2000");
+        User user1 = new User("user@gmail.com", bCryptPasswordEncoder.encode("123"), "Ador","Negash", "092200293", "242656789", UserType.ROLE_CUSTOMER ,Gender.MALE, "11-11-2000");
+        User user2 = new User("faizan@gmail.com", bCryptPasswordEncoder.encode("2345"), "Muhammad","Faizan", "067875453", "765569753", UserType.ROLE_EMPLOYEE ,Gender.MALE, "21-10-2003");
+        User user3 = new User("mahbaan77@gmail.com", bCryptPasswordEncoder.encode("123"), "Fateme", "Sabagh", "068673055", "876576524", UserType.ROLE_CUSTOMER, Gender.FEMALE, "11-11-2000");
+        User user4 = new User("jon4@gmail.com", bCryptPasswordEncoder.encode("1234"), "Jon", "Smith", "092220029", "878651434", UserType.ROLE_EMPLOYEE, Gender.MALE, "21-10-2000");
 
         Customer customer1= new Customer(user1, CustomerStatus.APPROVED);
         Customer customer2= new Customer(user2, CustomerStatus.APPROVED);
@@ -69,8 +69,8 @@ public class DatabaseIntiator implements ApplicationRunner {
         customerRepository.save(customer3);
         customerRepository.save(customer4);
 
-        accountRepository.save(Account1);
-        accountRepository.save(Account2);
+     //   accountRepository.save(Account1);
+        //    accountRepository.save(Account2);
         accountRepository.save(Account3);
         accountRepository.save(Account4);
 
@@ -113,7 +113,7 @@ public class DatabaseIntiator implements ApplicationRunner {
         if (user3 != null) {
             BankTransaction transaction2 = new BankTransaction(
                     TransactionType.DEPOSIT,
-                    UserType.CUSTOMER,
+                    UserType.ROLE_CUSTOMER,
                     user3,
                     Account3,
                     Account4,

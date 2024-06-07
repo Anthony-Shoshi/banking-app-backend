@@ -32,6 +32,7 @@ public class AccountController {
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
     }
+
     public class AccountNotFoundException extends RuntimeException {
         public AccountNotFoundException(String message) {
             super(message);
@@ -39,44 +40,16 @@ public class AccountController {
     }
 
     @GetMapping("/employees/customer-accounts")
-    @PreAuthorize("hasAnyRole('EMPLOYEE')")
+    //@PreAuthorize("hasAnyRole('ROLE_EMPLOYEE')")
     public ResponseEntity<Object> getAllAccounts(){
         return  ResponseEntity.status(200).body(accountService.getAllAccountDetails());
     }
 
-
-
-    @GetMapping("/customers/search-iban")
-    public ResponseEntity<Object> getIbansByCustomerName(
-            @RequestParam(name = "firstName") String firstName,
-            @RequestParam(name = "lastName") String lastName) {
-        try {
-            String iban = accountService.getCurrentAccountIbanByCustomerName(firstName, lastName);
-            Map<String, String> response = new HashMap<>();
-            response.put("iban", iban);
-            return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
-        }
-    }
-
-
-    @PutMapping("/employees/update-daily-limit")
-    public ResponseEntity<Object> updateDailyLimit(@RequestBody AccountPutDTO accountPutDTO) {
-        try {
-            accountService.updateDailyLimit(accountPutDTO.accountId(), accountPutDTO.dailyLimit());
-            return ResponseEntity.status(200).body("Daily limit updated successfully.");
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
-        }
-
-    }
-
-    @GetMapping("/accounts/{userId}")
-    public ResponseEntity<List<AccountsGetDTO>> getAccountsByUserId(@PathVariable Long userId) {
-        List<AccountsGetDTO> accounts = accountService.getAccountsByUserId(userId);
-        return ResponseEntity.ok(accounts);
-    }
+//    @GetMapping("/account-detail")
+//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
+//    public ResponseEntity<Object> getAccountDetails(@PathVariable Long userId){
+//        return ResponseEntity.status(200).body(accountService.getAccountDetails(userId));
+//    }
 
     @GetMapping("/{userId}/account-detail")
     public ResponseEntity<Object> getAccountDetails(@PathVariable Long userId) {
@@ -87,6 +60,6 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 
         }
-      }
+    }
 
 }

@@ -72,6 +72,4 @@ public class AccountServiceTest {
         assertNotNull(iban);
         assertTrue(iban.startsWith("NL"));
     }
-
-
 }

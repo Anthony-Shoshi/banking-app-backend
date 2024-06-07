@@ -59,7 +59,6 @@ public class TransactionController {
         }
     }
 
-
     @GetMapping("/customers/{customerId}/transactions")
     public ResponseEntity<List<BankTransactionDTO>> getTransactionsByCustomerId(@PathVariable Long customerId) {
         // Log incoming request for debugging
