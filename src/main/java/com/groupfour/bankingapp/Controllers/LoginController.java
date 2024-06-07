@@ -3,6 +3,7 @@ package com.groupfour.bankingapp.Controllers;
 
 import com.groupfour.bankingapp.Models.DTO.LoginRequestDTO;
 import com.groupfour.bankingapp.Services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,7 +17,8 @@ import javax.naming.AuthenticationException;
 @RequestMapping("/login")
 public class LoginController {
 
-    private UserService userService;
+
+    private final UserService userService;
 
     public LoginController(UserService userService) {
         this.userService = userService;

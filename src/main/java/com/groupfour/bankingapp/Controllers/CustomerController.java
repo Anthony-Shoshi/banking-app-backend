@@ -22,6 +22,7 @@ public class CustomerController {
     }
 
     @GetMapping("/employees/customers-without-accounts")
+    //@PreAuthorize("hasAnyRole('EMPLOYEE')")
     public ResponseEntity<Object> getCustomersWithoutAccounts() {
         List<CustomerGetWithOutAccountDTO> customers = customerService.getCustomersWithoutAccounts();
         if (customers.isEmpty()) {

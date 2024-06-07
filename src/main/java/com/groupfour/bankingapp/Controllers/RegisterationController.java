@@ -70,7 +70,7 @@ public class RegisterationController {
                 requestDTO.lastName(),
                 requestDTO.phoneNumber(),
                 requestDTO.bsn(),
-                UserType.CUSTOMER,
+                UserType.ROLE_CUSTOMER,
                 Gender.valueOf(requestDTO.gender().toUpperCase()),
                 requestDTO.DateOFbirth()
         );

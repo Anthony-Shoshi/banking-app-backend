@@ -27,7 +27,7 @@ public class AccountController {
     }
 
     @GetMapping("/employees/customer-accounts")
-    //@PreAuthorize("hasAnyRole('EMPLOYEE')")
+    //@PreAuthorize("hasAnyRole('ROLE_EMPLOYEE')")
     public ResponseEntity<Object> getAllAccounts(){
         return  ResponseEntity.status(200).body(accountService.getAllAccountDetails());
     }
