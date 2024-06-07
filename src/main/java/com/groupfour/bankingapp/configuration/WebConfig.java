@@ -16,5 +16,16 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedHeaders("*")
                 .allowCredentials(true)
                 .maxAge(3600);
+
+                //.allowCredentials(true);
+
+        registry.addMapping("/customers/transaction-history")
+                .allowedOrigins("http://localhost:5173", "http://localhost:8080") // Allow specific origin
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedHeaders("*")
+                .exposedHeaders("Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization")
+                .allowCredentials(true);
+
+
     }
 }

@@ -68,6 +68,14 @@ public class Account {
         return status;
     }
 
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
+    public void setDailyLimit(Double dailyLimit) {
+        this.dailyLimit = dailyLimit;
+    }
+
     public String getCurrency() {
         return currency;
     }

@@ -1,11 +1,15 @@
 package com.groupfour.bankingapp.Security;
 
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.security.*;
@@ -38,4 +42,6 @@ public class JwtKeyProvider {
     public Key getPrivateKey() {
         return privateKey;
     }
+
+
 }

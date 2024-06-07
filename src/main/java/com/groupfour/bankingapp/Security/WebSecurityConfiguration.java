@@ -1,6 +1,5 @@
 package com.groupfour.bankingapp.Security;
 
-
 import com.groupfour.bankingapp.Filter.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,13 +18,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 import java.util.Collections;
 
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-
-public class
-WebSecurityConfiguration {
-
+public class WebSecurityConfiguration {
 
     private final JwtFilter jwtFilter;
 
@@ -48,14 +45,9 @@ WebSecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable);
-
-        http.sessionManagement(
-                session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
-                cors(cors -> cors.configurationSource(corsConfigurationSource()));
-        http.authorizeHttpRequests(
-                authorize ->authorize
+        http.csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/employees/customer-accounts").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
@@ -63,11 +55,32 @@ WebSecurityConfiguration {
                         .requestMatchers("/employees/customers-without-accounts").permitAll()
                         .requestMatchers("/employees/customers-without-accounts/{userId}/approve-signup").permitAll()
                         .requestMatchers("/customers/{customerId}/transactions").permitAll()
+                        .requestMatchers("/customers/transaction-history").permitAll()
+                        .requestMatchers("/employees/update-daily-limit").permitAll()
                         .requestMatchers("/account-detail").permitAll()
                         .requestMatchers("/register/**").permitAll()
-                        .anyRequest().authenticated());
+                        .anyRequest().authenticated()
+                );
 
+//        http.sessionManagement(
+//                session -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
+//                cors(cors -> cors.configurationSource(corsConfigurationSource()));
+//        http.authorizeHttpRequests(
+//                authorize ->authorize
+//                        .requestMatchers("/login").permitAll()
+//                        .requestMatchers("/employees/customer-accounts").permitAll()
+//                        .requestMatchers("/h2-console/**").permitAll()
+//                        .requestMatchers("/transactions").permitAll()
+//                        .requestMatchers("/employees/customers-without-accounts").permitAll()
+//                        .requestMatchers("/employees/customers-without-accounts/{userId}/approve-signup").permitAll()
+//                        .requestMatchers("/customers/{customerId}/transactions").permitAll()
+//                        .requestMatchers("/account-detail").permitAll()
+//                        .requestMatchers("/register/**").permitAll()
+//                        .anyRequest().authenticated());
+//
         http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
+
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
