@@ -4,17 +4,13 @@ import com.groupfour.bankingapp.Controllers.AccountController;
 import com.groupfour.bankingapp.Models.Account;
 import com.groupfour.bankingapp.Models.AccountType;
 import com.groupfour.bankingapp.Models.Customer;
-import com.groupfour.bankingapp.Models.CustomerStatus;
-import com.groupfour.bankingapp.Models.DTO.AccountsGetDTO;
-import com.groupfour.bankingapp.Models.DTO.ApproveSignupPutDTO;
+import com.groupfour.bankingapp.Models.DTO.*;
 import com.groupfour.bankingapp.Repository.AccountRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Random;
 
@@ -109,11 +105,19 @@ public class AccountService {
         }
         return iban;
     }
+    @Transactional
+    public void updateAccountLimits(UpdateAccountLimitsDTO updateAccountLimitsDTO) {
+        Account account = accountRepository.findById(updateAccountLimitsDTO.getAccountId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid account ID"));
 
-    public void updateDailyLimit(Long accountId, double dailyLimit) throws RuntimeException {
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new RuntimeException("Account not found with ID: " + accountId));
-        account.setDailyLimit(dailyLimit);
+        if (updateAccountLimitsDTO.getDailyLimit() != null) {
+            account.setDailyLimit(updateAccountLimitsDTO.getDailyLimit());
+        }
+
+        if (updateAccountLimitsDTO.getAbsoluteLimit() != null) {
+            account.setAbsoluteLimit(updateAccountLimitsDTO.getAbsoluteLimit());
+        }
+
         accountRepository.save(account);
     }
 
