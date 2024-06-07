@@ -182,7 +182,7 @@ public class TransactionService {
 
         return new BankTransaction(
                 TransactionType.TRANSFER,
-                UserType.EMPLOYEE,
+                UserType.ROLE_EMPLOYEE,
                 initiator,
                 fromAccount,
                 toAccount,
