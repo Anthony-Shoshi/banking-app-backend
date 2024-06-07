@@ -27,16 +27,16 @@ public class AccountController {
     }
 
     @GetMapping("/employees/customer-accounts")
-    @PreAuthorize("hasAnyRole('EMPLOYEE')")
+    //@PreAuthorize("hasAnyRole('EMPLOYEE')")
     public ResponseEntity<Object> getAllAccounts(){
         return  ResponseEntity.status(200).body(accountService.getAllAccountDetails());
     }
 
-  /*  @GetMapping("/account-detail")
-    //@PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
-    public ResponseEntity<Object> getAccountDetails(@PathVariable Long userId){
-        return ResponseEntity.status(200).body(accountService.getAccountDetails(userId));
-    }*/
+//    @GetMapping("/account-detail")
+//    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
+//    public ResponseEntity<Object> getAccountDetails(@PathVariable Long userId){
+//        return ResponseEntity.status(200).body(accountService.getAccountDetails(userId));
+//    }
 
     @GetMapping("/{userId}/account-detail")
     public ResponseEntity<Object> getAccountDetails(@PathVariable Long userId) {
