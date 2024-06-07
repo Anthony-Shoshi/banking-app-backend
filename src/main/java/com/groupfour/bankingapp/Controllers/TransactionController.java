@@ -27,7 +27,7 @@ import java.util.Optional;
 @RestController
 @ControllerAdvice
 @Log
-
+//@RequestMapping("/transactions")
 public class TransactionController {
 
     private final TransactionService transactionService;
@@ -65,9 +65,15 @@ public class TransactionController {
 
     @GetMapping("/customers/{customerId}/transactions")
     public ResponseEntity<List<BankTransactionDTO>> getTransactionsByCustomerId(@PathVariable Long customerId) {
+        // Log incoming request for debugging
+        System.out.println("Fetching transactions for customer ID: " + customerId);
+
         Optional<List<BankTransactionDTO>> transactions = transactionService.getTransactionsByCustomerId(customerId);
-        return transactions.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(404).build());
+        if (transactions.isPresent()) {
+            return ResponseEntity.ok(transactions.get());
+        } else {
+            return ResponseEntity.status(404).build();
+        }
     }
 
     @GetMapping("/customers/transaction-history")
@@ -81,10 +87,6 @@ public class TransactionController {
 
         LocalDate start = (startDate != null && !startDate.isEmpty()) ? LocalDate.parse(startDate) : null;
         LocalDate end = (endDate != null && !endDate.isEmpty()) ? LocalDate.parse(endDate) : null;
-
-        System.out.println("CustomerId: " + customerId);
-        System.out.println("StartDate: " + start);
-        System.out.println("EndDate: " + end);
 
         List<BankTransactionDTO> transactions = transactionService.getTransactionHistory(customerId, start, end, fromAmount, toAmount, iban);
         return ResponseEntity.ok(transactions);

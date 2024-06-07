@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -33,5 +32,12 @@ public interface TransactionRepository extends JpaRepository<BankTransaction, Lo
             @Param("fromAmount") Double fromAmount,
             @Param("toAmount") Double toAmount,
             @Param("iban") String iban);
+
+    @Query("SELECT bt FROM BankTransaction bt WHERE bt.fromAccount = :account AND bt.currentTime BETWEEN :startOfDay AND :endOfDay")
+    List<BankTransaction> findByFromAccountAndCurrentTimeBetween(
+            @Param("account") Account account,
+            @Param("startOfDay") LocalDateTime startOfDay,
+            @Param("endOfDay") LocalDateTime endOfDay
+    );
 }
 

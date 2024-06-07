@@ -21,7 +21,7 @@ import java.util.Random;
 
 @Service
 public class AccountService {
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
     public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
@@ -102,6 +102,13 @@ public class AccountService {
                 )
                 .collect(Collectors.toList());
     }*/
+    public String getCurrentAccountIbanByCustomerName(String firstName, String lastName) {
+        String iban = accountRepository.findCurrentAccountIbanByCustomerName(firstName, lastName);
+        if (iban == null) {
+            throw new IllegalArgumentException("No current account found for the given customer name");
+        }
+        return iban;
+    }
 
     public void updateDailyLimit(Long accountId, double dailyLimit) throws RuntimeException {
         Account account = accountRepository.findById(accountId)
@@ -134,6 +141,26 @@ public class AccountService {
         }
         return accountDetails;
     }
+
+    public List<AccountsGetDTO> getAccountsByUserId(Long userId) {
+        List<Account> accounts = accountRepository.findByCustomerUserUserId(userId);
+        return accounts.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    private AccountsGetDTO convertToDto(Account account) {
+        return new AccountsGetDTO(
+                account.getAccountId(),
+                account.getCustomer().getCustomerId(),
+                account.getCustomer().getUser().getFirstName() + " " + account.getCustomer().getUser().getLastName(),
+                account.getIBAN(),
+                account.getBalance(),
+                account.getAccountType(),
+                account.getCustomer().getStatus(),
+                account.getAbsoluteLimit(),
+                account.getDailyLimit()
+        );
+    }
+
 
 }
 

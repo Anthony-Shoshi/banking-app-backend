@@ -1,14 +1,16 @@
 package com.groupfour.bankingapp.Services;
 
-import com.groupfour.bankingapp.Config.BeanFactory;
 import com.groupfour.bankingapp.Models.*;
 import com.groupfour.bankingapp.Models.DTO.BankTransactionDTO;
-import com.groupfour.bankingapp.Models.DTO.BankTransactionPostDTO;
+import com.groupfour.bankingapp.Models.DTO.TransactionRequestDTO;
 import com.groupfour.bankingapp.Repository.AccountRepository;
 import com.groupfour.bankingapp.Repository.TransactionRepository;
+import com.groupfour.bankingapp.Config.BeanFactory;
+import com.groupfour.bankingapp.Models.DTO.BankTransactionPostDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+//import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -32,6 +34,7 @@ public class TransactionService {
         this.beanFactory = beanFactory;
         this.userService= userService;
         this.request = request;
+
     }
 
 
@@ -120,6 +123,90 @@ public class TransactionService {
     }
 
     @Transactional
+    public BankTransactionDTO deposit(TransactionRequestDTO request) {
+        Account account = accountRepository.findById(request.getAccountId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid account ID"));
+
+        double todayTotalTransactions = getTodayTotalTransactions(account);
+        if (todayTotalTransactions + request.getAmount() > account.getDailyLimit()) {
+            throw new IllegalArgumentException("Daily limit exceeded");
+        }
+
+        account.setBalance(account.getBalance() + request.getAmount());
+        accountRepository.save(account);
+
+        BankTransaction transaction = new BankTransaction(
+                TransactionType.DEPOSIT,
+                UserType.CUSTOMER,
+                account.getCustomer().getUser(),
+                account,
+                account,
+                request.getAmount(),
+                LocalDateTime.now(),
+                TransactionStatus.SUCCESS
+        );
+
+        transactionRepository.save(transaction);
+
+        return mapToDTO(transaction);
+    }
+
+    @Transactional
+    public BankTransactionDTO withdraw(TransactionRequestDTO request) {
+        Account account = accountRepository.findById(request.getAccountId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid account ID"));
+
+        if (account.getBalance() < request.getAmount()) {
+            throw new IllegalArgumentException("Insufficient funds");
+        }
+
+        double todayTotalTransactions = getTodayTotalTransactions(account);
+        if (todayTotalTransactions + request.getAmount() > account.getDailyLimit()) {
+            throw new IllegalArgumentException("Daily limit exceeded");
+        }
+
+        account.setBalance(account.getBalance() - request.getAmount());
+        accountRepository.save(account);
+
+        BankTransaction transaction = new BankTransaction(
+                TransactionType.WITHDRAW,
+                UserType.CUSTOMER,
+                account.getCustomer().getUser(),
+                account,
+                account,
+                request.getAmount(),
+                LocalDateTime.now(),
+                TransactionStatus.SUCCESS
+        );
+
+        transactionRepository.save(transaction);
+
+        return mapToDTO(transaction);
+    }
+
+    private double getTodayTotalTransactions(Account account) {
+        LocalDateTime startOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
+        LocalDateTime endOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+
+        List<BankTransaction> todayTransactions = transactionRepository.findByFromAccountAndCurrentTimeBetween(account, startOfDay, endOfDay);
+        return todayTransactions.stream().mapToDouble(BankTransaction::getTransferAmount).sum();
+    }
+
+    private BankTransactionDTO mapToDTO(BankTransaction transaction) {
+        return new BankTransactionDTO(
+                transaction.getType(),
+                transaction.getInitiatedBy(),
+                transaction.getUser().getFirstName(),
+                transaction.getUser().getLastName(),
+                transaction.getFromAccount() != null ? transaction.getFromAccount().getIBAN() : null,
+                transaction.getToAccount() != null ? transaction.getToAccount().getIBAN() : null,
+                transaction.getTransferAmount(),
+                transaction.getCurrentTime().toString(),
+                transaction.getStatus()
+        );
+    }
+
+    @Transactional
     public BankTransactionPostDTO transferMoney(String fromAccountIban, String toAccountIban, double transferAmount) {
         Account fromAccount = getAccountByIban(fromAccountIban);
         Account toAccount = getAccountByIban(toAccountIban);
@@ -198,9 +285,5 @@ public class TransactionService {
                 transferAmount
         );
     }
-
-
-
-
 
 }
