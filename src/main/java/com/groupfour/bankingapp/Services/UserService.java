@@ -40,7 +40,7 @@ public class UserService {
         if (user != null && passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
             Customer customer = customerRepository.findByUserUserId(user.getUserId());
             if (customer != null && customer.getStatus() == CustomerStatus.APPROVED) {
-                String token = jwtTokenProvider.createToken(user.getFirstName(), user.getLastName(), user.getEmail(), user.getUserId(), user.getRole(), true);
+                String token = jwtTokenProvider.createToken(user.getFirstName(), user.getLastName(),  user.getEmail(), customer.getCustomerId(), user.getUserId(), user.getRole(), true);
                 return new LoginResponseDTO(user.getEmail(), token);
                 //String token = jwtTokenProvider.createToken(user.getUserId(), user.getRole(), true); // Always set approved to true here
                 //return new LoginResponseDTO(user.getUserId(), user.getCustomer().getCustomerId(), user.getEmail(), token, user.getRole().name(), user.getFirstName(), user.getLastName());

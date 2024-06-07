@@ -55,10 +55,11 @@ public class JwtTokenProvider {
         this.jwtKeyProvider = jwtKeyProvider;
     }
 
-    public String createToken(String firstName, String lastName, String email, Long userId, UserType type, Boolean isApproved) {
+    public String createToken(String firstName, String lastName, String email, Long userId, Long customerId, UserType type, Boolean isApproved) {
         Claims claims = Jwts.claims().setSubject(String.valueOf(userId));
         claims.put("firstName", firstName);
         claims.put("lastName", lastName);
+        claims.put("customerId", customerId);
         claims.put("email", email);
         claims.put("auth", type.name());
         claims.put("approved", isApproved);
