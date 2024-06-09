@@ -8,6 +8,7 @@ import com.groupfour.bankingapp.Models.DTO.UpdateDailyLimitDTO;
 import com.groupfour.bankingapp.Services.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -31,6 +32,7 @@ public class AccountController {
     }
 
     @GetMapping("/employees/customer-accounts")
+    //@PreAuthorize("hasAnyRole('EMPLOYEE')")
     public ResponseEntity<Object> getAllAccounts(){
         return  ResponseEntity.status(200).body(accountService.getAllAccountDetails());
     }

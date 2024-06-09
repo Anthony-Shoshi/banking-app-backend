@@ -131,6 +131,7 @@ public class WebSecurityConfiguration {
                         .requestMatchers("/transactions").permitAll()
                         .requestMatchers("/employees/customers-without-accounts").permitAll()
                         .requestMatchers("/employees/customers-without-accounts/{userId}/approve-signup").permitAll()
+                        .requestMatchers("/employees/close-account/{customerId}").permitAll()
                         .requestMatchers("/customers/{customerId}/transactions").permitAll()
                         .requestMatchers("/customers/transaction-history").permitAll()
                         .requestMatchers("/employees/update-daily-limit").permitAll()

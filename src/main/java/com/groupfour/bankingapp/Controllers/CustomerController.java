@@ -45,4 +45,16 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
         }
     }
+    @DeleteMapping("/employees/close-account/{customerId}")
+    public ResponseEntity<Object> closeAccount(@PathVariable Long customerId){
+        try {
+            customerService.closeAccount(customerId);
+            return ResponseEntity.ok().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
+        }
+    }
+
 }
