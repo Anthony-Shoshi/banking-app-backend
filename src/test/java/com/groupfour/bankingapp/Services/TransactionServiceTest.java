@@ -72,69 +72,7 @@ public class TransactionServiceTest {
         userService = new UserService(userRepository, customerRepository, passwordEncoder, jwtTokenProvider);
         transactionService = new TransactionService(transactionRepository, accountRepository, beanFactory, userService, request);
     }
-//    @Test
-//    void testTransferMoney() {
-//        // Mock data
-//        String fromAccountIban = "from_iban";
-//        String toAccountIban = "to_iban";
-//        double transferAmount = 100.0;
-//
-//        User user = new User(
-//                "john@example.com",
-//                "password123",
-//                "John",
-//                "Doe",
-//                "1234567890",
-//                "123456789",
-//                UserType.CUSTOMER,
-//                Gender.MALE,
-//                "1990-01-01"
-//        );
-//        user.setUserId(1L);  // Ensure the user has an ID
-//
-//        Customer customer = new Customer(user, CustomerStatus.APPROVED);
-//        Account fromAccount = new Account(customer, fromAccountIban, 1000.0, 5000.0, AccountType.CURRENT, true, 1000.0, AccountStatus.ACTIVE, "USD");
-//        Account toAccount = new Account(customer, toAccountIban, 2000.0, 5000.0, AccountType.SAVING, true, 1000.0, AccountStatus.ACTIVE, "USD");
-//
-//        String token = "mockedToken";
-//        when(jwtTokenProvider.resolveToken(request)).thenReturn(token);
-//        when(jwtTokenProvider.validateToken(token)).thenReturn(true);
-//
-//        UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-//                String.valueOf(user.getUserId()),
-//                "",
-//                Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()))
-//        );
-//
-//        // Mock behavior to return an Authentication instance
-//        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-//        when(jwtTokenProvider.getAuthentication(token)).thenReturn(authentication);
-//
-//        // Ensure the UserRepository returns the user when looked up by ID
-//        when(userRepository.findById(user.getUserId())).thenReturn(Optional.of(user));
-//
-//        // Mock behavior
-//        when(accountRepository.findByIBAN(fromAccountIban)).thenReturn(fromAccount);
-//        when(accountRepository.findByIBAN(toAccountIban)).thenReturn(toAccount);
-//        when(userService.getCurrentLoggedInUser(request)).thenReturn(user);
-//        doNothing().when(accountRepository).save(any(Account.class));
-//        when(transactionRepository.save(any(BankTransaction.class))).thenReturn(new BankTransaction());
-//
-//        // Call the method under test
-//        BankTransactionPostDTO result = transactionService.transferMoney(fromAccountIban, toAccountIban, transferAmount);
-//
-//        // Assertions
-//        assertNotNull(result);
-//        assertEquals(fromAccountIban, result.fromAccountIban());
-//        assertEquals(toAccountIban, result.toAccountIban());
-//        assertEquals(transferAmount, result.transferAmount());
-//
-//        // Verify that necessary methods were called
-//        verify(accountRepository).findByIBAN(fromAccountIban);
-//        verify(accountRepository).findByIBAN(toAccountIban);
-//        verify(accountRepository, times(2)).save(any(Account.class));
-//        verify(transactionRepository).save(any(BankTransaction.class));
-//    }
+
     @Test
     void testGetAllTransactions() {
         // Mock data
