@@ -1,6 +1,6 @@
 FROM ubuntu:latest AS build
 RUN apt-get update
-RUN apt-get install -y openjdk-11-jdk maven
+RUN apt-get install -y openjdk-21-jdk maven
 COPY . .
 RUN chmod +x mvnw
 RUN ./mvnw clean install -U -X
