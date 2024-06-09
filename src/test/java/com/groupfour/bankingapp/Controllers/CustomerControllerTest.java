@@ -5,6 +5,7 @@ import com.groupfour.bankingapp.Models.DTO.ApproveSignupPutDTO;
 import com.groupfour.bankingapp.Security.JwtTokenProvider;
 import com.groupfour.bankingapp.Services.CustomerService;
 import com.groupfour.bankingapp.Services.TransactionService;
+import com.groupfour.bankingapp.Services.UserService;
 import com.groupfour.bankingapp.exception.InvalidLimitException;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -43,6 +44,11 @@ public class CustomerControllerTest {
 
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
+
+    @MockBean
+    private UserService userService;
+
+
     @Test
     @WithMockUser
     void getCustomersWithoutAccountsReturnsEmptyList() throws Exception {

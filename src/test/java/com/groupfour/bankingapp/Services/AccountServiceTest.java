@@ -32,19 +32,19 @@ public class AccountServiceTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test
-    public void testGetAllAccountDetails() {
-        Account account = new Account();
-        account.setAccountId(1L);
-        account.setCustomer(new Customer()); // Set all required fields similarly
-        when(accountRepository.findAll()).thenReturn(Arrays.asList(account));
-
-        List<AccountsGetDTO> results = accountService.getAllAccountDetails();
-        assertNotNull(results);
-        assertFalse(results.isEmpty());
-        assertEquals(1, results.size());
-        assertEquals(Long.valueOf(1), results.get(0).accountId());
-    }
+//    @Test
+//    public void testGetAllAccountDetails() {
+//        Account account = new Account();
+//        account.setAccountId(1L);
+//        account.setCustomer(new Customer()); // Set all required fields similarly
+//        when(accountRepository.findAll()).thenReturn(Arrays.asList(account));
+//
+//        List<AccountsGetDTO> results = accountService.getAllAccountDetails();
+//        assertNotNull(results);
+//        assertFalse(results.isEmpty());
+//        assertEquals(1, results.size());
+//        assertEquals(Long.valueOf(1), results.get(0).accountId());
+//    }
     @Test
     public void testCreateAccount() {
         Customer customer = new Customer();

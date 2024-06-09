@@ -8,6 +8,7 @@ import com.groupfour.bankingapp.Models.DTO.AccountsGetDTO;
 import com.groupfour.bankingapp.Security.JwtTokenProvider;
 import com.groupfour.bankingapp.Services.AccountService;
 import com.groupfour.bankingapp.Services.TransactionService;
+import com.groupfour.bankingapp.Services.UserService;
 import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -48,6 +49,9 @@ public class AccountControllerTest {
 
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
+
+    @MockBean
+    private UserService userService;
     @Test
     @WithMockUser(username = "admin", roles = {"EMPLOYEE"})
     void getAllAccountsShouldReturnAccounts() throws Exception {
