@@ -1,5 +1,6 @@
 package com.groupfour.bankingapp.Controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.groupfour.bankingapp.Models.DTO.BankTransactionDTO;
 import com.groupfour.bankingapp.Models.DTO.BankTransactionPostDTO;
 import com.groupfour.bankingapp.Models.Gender;
@@ -14,8 +15,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,8 +27,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class TransactionControllerTest {
 
@@ -41,6 +47,8 @@ public class TransactionControllerTest {
 
     @Mock
     private HttpServletRequest httpServletRequest;
+    @Autowired
+    private ObjectMapper objectMapper;
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);

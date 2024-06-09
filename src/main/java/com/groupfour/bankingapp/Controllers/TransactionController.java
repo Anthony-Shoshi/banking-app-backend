@@ -51,8 +51,6 @@ public class TransactionController {
 
     @GetMapping("/transactions")
     public ResponseEntity<Object> getAllTransactions() {
-
-        List<BankTransactionDTO> transactions = transactionService.getAllTransactions();
         try {
             return ResponseEntity.status(200).body(transactionService.getAllTransactions());
         } catch (Exception exception) {
