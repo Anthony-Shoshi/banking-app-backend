@@ -127,10 +127,10 @@ public class TransactionService {
         Account account = accountRepository.findById(request.getAccountId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid account ID"));
 
-        double todayTotalTransactions = getTodayTotalTransactions(account);
-        if (todayTotalTransactions + request.getAmount() > account.getDailyLimit()) {
-            throw new IllegalArgumentException("Daily limit exceeded");
-        }
+//        double todayTotalTransactions = getTodayTotalTransactions(account);
+//        if (todayTotalTransactions + request.getAmount() > account.getDailyLimit()) {
+//            throw new IllegalArgumentException("Daily limit exceeded");
+//        }
 
         account.setBalance(account.getBalance() + request.getAmount());
         accountRepository.save(account);
@@ -157,7 +157,7 @@ public class TransactionService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid account ID"));
 
         if (account.getBalance() < request.getAmount()) {
-            throw new IllegalArgumentException("Insufficient funds");
+            throw new IllegalArgumentException("Insufficient Balance");
         }
 
         double todayTotalTransactions = getTodayTotalTransactions(account);
