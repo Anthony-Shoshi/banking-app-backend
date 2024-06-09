@@ -39,18 +39,17 @@ public class UserService {
         User user = userRepository.findByEmail(loginRequest.email());
         if (user != null && passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
             Customer customer = customerRepository.findByUserUserId(user.getUserId());
-            if (customer != null && customer.getStatus() == CustomerStatus.APPROVED) {
-                String token = jwtTokenProvider.createToken(user.getFirstName(), user.getLastName(),  user.getEmail(), customer.getCustomerId(), user.getUserId(), user.getRole(), true);
+            if (customer != null) {
+                String token = jwtTokenProvider.createToken(user.getFirstName(), user.getLastName(), user.getEmail(), customer.getCustomerId(), user.getUserId(), user.getRole(), customer.getStatus() == CustomerStatus.APPROVED);
                 return new LoginResponseDTO(user.getEmail(), token);
-                //String token = jwtTokenProvider.createToken(user.getUserId(), user.getRole(), true); // Always set approved to true here
-                //return new LoginResponseDTO(user.getUserId(), user.getCustomer().getCustomerId(), user.getEmail(), token, user.getRole().name(), user.getFirstName(), user.getLastName());
             } else {
-                throw new AuthenticationException("Your Account has not been approved yet. Please wait for approval.");
+                throw new AuthenticationException("Customer record not found.");
             }
         } else {
             throw new AuthenticationException("Invalid credentials");
         }
     }
+
     public User getCurrentLoggedInUser(HttpServletRequest request) {
         try {
             String token = jwtTokenProvider.resolveToken(request);
