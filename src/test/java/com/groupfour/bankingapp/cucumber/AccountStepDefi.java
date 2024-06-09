@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @CucumberContextConfiguration
-@WithMockUser(username="employee", roles={"EMPLOYEE"})
+@WithMockUser(username="employee", roles={"ROLE_EMPLOYEE"})
 public class AccountStepDefi {
 
     @Autowired
