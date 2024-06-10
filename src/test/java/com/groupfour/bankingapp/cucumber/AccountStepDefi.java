@@ -1,4 +1,6 @@
+
 package com.groupfour.bankingapp.cucumber;
+import com.groupfour.bankingapp.stepdefinitions.BaseStepDefinitions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -13,11 +15,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
+
 @AutoConfigureMockMvc
-@CucumberContextConfiguration
 @WithMockUser(username="employee", roles={"ROLE_EMPLOYEE"})
-public class AccountStepDefi {
+public class AccountStepDefi extends BaseStepDefinitions {
 
     @Autowired
     private MockMvc mockMvc;
@@ -68,3 +69,4 @@ public class AccountStepDefi {
 
     // Add other steps similarly, considering the role and the possible results.
 }
+

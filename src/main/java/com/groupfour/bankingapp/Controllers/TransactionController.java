@@ -51,7 +51,6 @@ public class TransactionController {
 
     @GetMapping("/transactions")
     public ResponseEntity<Object> getAllTransactions() {
-
         try {
             return ResponseEntity.status(200).body(transactionService.getAllTransactions());
         } catch (Exception exception) {
@@ -62,7 +61,7 @@ public class TransactionController {
 
 
     @GetMapping("/customers/{customerId}/transactions")
-    public ResponseEntity<List<BankTransactionDTO>> getTransactionsByCustomerId(@PathVariable Long customerId) {
+    public ResponseEntity<Object> getTransactionsByCustomerId(@PathVariable Long customerId) {
         // Log incoming request for debugging
         System.out.println("Fetching transactions for customer ID: " + customerId);
 
@@ -91,30 +90,8 @@ public class TransactionController {
     }
 
     @PostMapping("/transactions")
-    public ResponseEntity<BankTransactionPostDTO> transferMoney(@RequestBody BankTransactionPostDTO transferRequest, HttpServletRequest request) {
+    public ResponseEntity<Object> transferMoney(@RequestBody BankTransactionPostDTO transferRequest, HttpServletRequest request) {
         try {
-            // Log headers
-            System.out.println("Request Headers:");
-            request.getHeaderNames().asIterator().forEachRemaining(headerName ->
-                    System.out.println(headerName + ": " + request.getHeader(headerName))
-            );
-
-            // Log request body
-            System.out.println("Request Body:");
-            System.out.println(transferRequest);
-
-            String token = jwtTokenProvider.resolveToken(request);
-            if (token == null || !jwtTokenProvider.validateToken(token)) {
-                System.err.println("Token is invalid");
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-            }
-
-            User initiator = userService.getCurrentLoggedInUser(request);
-            if (initiator == null) {
-                System.err.println("Failed to create transaction: Initiator is null");
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-            }
-
             BankTransactionPostDTO transactionDTO = transactionService.transferMoney(
                     transferRequest.fromAccountIban(),
                     transferRequest.toAccountIban(),
