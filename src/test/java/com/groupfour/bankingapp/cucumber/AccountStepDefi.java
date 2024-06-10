@@ -1,5 +1,5 @@
-
 package com.groupfour.bankingapp.cucumber;
+
 import com.groupfour.bankingapp.stepdefinitions.BaseStepDefinitions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -17,15 +17,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @AutoConfigureMockMvc
-@WithMockUser(username="employee", roles={"ROLE_EMPLOYEE"})
+@WithMockUser(username="employee", roles={"EMPLOYEE"})
 public class AccountStepDefi extends BaseStepDefinitions {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @Given("an employee is logged in with role EMPLOYEE")
-    public void an_employee_is_logged_in_with_role_EMPLOYEE() {
+    @Given("an employee is logged in with role EMPLOYEEE")
+    public void an_employee_is_logged_in_with_role_EMPLOYEEE() {
         // Mocking security context here or using Spring Security Test
+
     }
 
     @When("the employee requests all customer accounts")
