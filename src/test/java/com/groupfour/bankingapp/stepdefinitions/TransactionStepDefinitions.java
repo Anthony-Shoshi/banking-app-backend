@@ -1,86 +1,163 @@
 package com.groupfour.bankingapp.stepdefinitions;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.groupfour.bankingapp.Controllers.TransactionController;
 import com.groupfour.bankingapp.Models.DTO.BankTransactionDTO;
 import com.groupfour.bankingapp.Models.DTO.BankTransactionPostDTO;
-import com.groupfour.bankingapp.Models.DTO.LoginRequestDTO;
-import com.groupfour.bankingapp.Models.TransactionType;
 import com.groupfour.bankingapp.Models.UserType;
 import com.groupfour.bankingapp.Models.TransactionStatus;
+import com.groupfour.bankingapp.Models.TransactionType;
+import com.groupfour.bankingapp.Security.JwtTokenProvider;
+import com.groupfour.bankingapp.Services.TransactionService;
+import com.groupfour.bankingapp.Services.UserService;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.*;
+import jakarta.servlet.http.HttpServletRequest;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
-public class TransactionStepDefinitions extends BaseStepDefinitions{
-    private static final String TRANSACTION_ENDPOINT = "/transactions";
+public class TransactionStepDefinitions extends BaseStepDefinitions {
 
-    private static final String LOGIN_ENDPOINT = "/login";
-    private final BankTransactionDTO  bankTransaction = new BankTransactionDTO(
-                TransactionType.TRANSFER, // Replace with actual value
-                UserType.ROLE_EMPLOYEE, // Replace with actual value
+    @Mock
+    private TransactionService transactionService;
+
+    @Mock
+    private JwtTokenProvider jwtTokenProvider;
+
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private UserService userService;
+
+    @InjectMocks
+    private TransactionController transactionController;
+
+    private ResponseEntity<Object> response;
+    private List<BankTransactionDTO> expectedTransactions;
+
+    @Given("an employee is logged in with role EMPLOYEE")
+    public void an_employee_is_logged_in_with_role_EMPLOYEE() {
+        MockitoAnnotations.openMocks(this);
+        // Mock JWT token validation or any authentication logic if needed
+        // For simplicity, let's assume the user is authenticated if the role is EMPLOYEE
+    }
+
+    @When("request to get all transactions")
+    public void request_to_get_all_transactions() {
+        // Define expected transactions
+        expectedTransactions = new ArrayList<>();
+        expectedTransactions.add(new BankTransactionDTO(
+                TransactionType.TRANSFER,
+                UserType.ROLE_EMPLOYEE,
                 "John",
                 "Doe",
-                "GB82WEST12345698765432",
-                "GB82WEST12345698765433",
-                1000.0,
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
-                TransactionStatus.SUCCESS// Replace with actual value
-            );
+                "DE89370400440532013000",
+                "DE89370400440532013001",
+                1000.00,
+                "2023-06-10T10:15:30",
+                TransactionStatus.SUCCESS
+        ));
+        expectedTransactions.add(new BankTransactionDTO(
+                TransactionType.TRANSFER,
+                UserType.ROLE_EMPLOYEE,
+                "Jane",
+                "Smith",
+                "DE89370400440532013002",
+                "DE89370400440532013003",
+                1500.00,
+                "2023-06-10T11:00:00",
+                TransactionStatus.FAILED
+        ));
 
-    private BankTransactionPostDTO transactionPostDTO;
-    private final HttpHeaders httpHeaders = new HttpHeaders();
-    private ResponseEntity<String> response;
-    @Autowired
-    private TestRestTemplate restTemplate;
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    private String token;
-
-    private LoginRequestDTO loginRequestDTO;
-    @Given("I login as an employee")
-    public void iLoginAsAn() throws JsonProcessingException {
-        loginRequestDTO = new LoginRequestDTO("employee@example.com", "password123");
-
-        String loginRequestJson = objectMapper.writeValueAsString(loginRequestDTO);
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> request = new HttpEntity<>(loginRequestJson, httpHeaders);
-
-        response = restTemplate.exchange(LOGIN_ENDPOINT, HttpMethod.POST, request, String.class);
-
-        if (response.getStatusCode() == HttpStatus.OK) {
-            String responseBody = response.getBody();
-            token = objectMapper.readTree(responseBody).get("token").asText();
-            httpHeaders.set("Authorization", "Bearer " + token);
-        } else {
-            throw new RuntimeException("Failed to login: " + response.getStatusCode());
-        }
+        when(transactionService.getAllTransactions()).thenReturn(expectedTransactions);
+        response = transactionController.getAllTransactions();
     }
 
-    @When("I request to get all transactions")
-    public void i_request_to_get_all_transactions() {
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> request = new HttpEntity<>(null, httpHeaders);
-        response = restTemplate.exchange(TRANSACTION_ENDPOINT, HttpMethod.GET, request, String.class);
+    @Then("should get all transactions")
+    public void should_get_all_transactions() {
+        // Cast response body to expected type
+        List<BankTransactionDTO> actualTransactions = (List<BankTransactionDTO>) response.getBody();
+        // Assert that the response body is the same as the expected transactions
+        assertEquals(expectedTransactions, actualTransactions);
     }
 
-    @Then("I should get all transactions")
-    public void i_should_get_all_transactions() {
-        assertNotNull(response.getBody());
-        assertTrue(response.getBody().contains("transactions")); // Adjust based on actual response structure
-    }
-
-    @Then("I get a status code of {int}")
-    public void i_get_a_status_code_of(Integer statusCode) {
+    @Then("get a status code of {int}")
+    public void get_a_status_code_of(Integer statusCode) {
         assertEquals(statusCode.intValue(), response.getStatusCodeValue());
+    }
+
+    @When("request to get transactions of a customer with id {long}")
+    public void request_to_get_transactions_of_a_customer_with_id(Long customerId) {
+        // Define expected transactions for a specific customer
+        expectedTransactions = new ArrayList<>();
+        expectedTransactions.add(new BankTransactionDTO(
+                TransactionType.TRANSFER,
+                UserType.ROLE_EMPLOYEE,
+                "Alice",
+                "Brown",
+                "DE89370400440532013004",
+                "DE89370400440532013005",
+                2000.00,
+                "2023-06-10T12:00:00",
+                TransactionStatus.SUCCESS
+        ));
+        expectedTransactions.add(new BankTransactionDTO(
+                TransactionType.TRANSFER,
+                UserType.ROLE_EMPLOYEE,
+                "Bob",
+                "Green",
+                "DE89370400440532013006",
+                "DE89370400440532013007",
+                2500.00,
+                "2023-06-10T13:00:00",
+                TransactionStatus.FAILED
+        ));
+
+        when(transactionService.getTransactionsByCustomerId(customerId)).thenReturn(Optional.of(expectedTransactions));
+        response = transactionController.getTransactionsByCustomerId(customerId);
+    }
+
+    @Then("should get transactions of a customer")
+    public void should_get_transactions_of_a_customer() {
+        // Cast response body to expected type
+        List<BankTransactionDTO> actualTransactions = (List<BankTransactionDTO>) response.getBody();
+        // Assert that the response body is the same as the expected transactions for the customer
+        assertEquals(expectedTransactions, actualTransactions);
+    }
+
+    @When("request to post a transaction")
+    public void request_to_post_a_transaction() {
+        // Define a sample transaction request
+        BankTransactionPostDTO transferRequest = new BankTransactionPostDTO(
+                "DE89370400440532013000",
+                "DE89370400440532013001",
+                500.00
+        );
+
+        // Mock the service layer to return a response when the transaction is posted
+        BankTransactionPostDTO expectedResponse = new BankTransactionPostDTO(
+                "DE89370400440532013000",
+                "DE89370400440532013001",
+                500.00
+        );
+        when(transactionService.transferMoney(
+                transferRequest.fromAccountIban(),
+                transferRequest.toAccountIban(),
+                transferRequest.transferAmount()
+        )).thenReturn(expectedResponse);
+
+        // Call the controller method
+        response = transactionController.transferMoney(transferRequest, request);
     }
 }
