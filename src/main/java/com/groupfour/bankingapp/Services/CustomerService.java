@@ -52,4 +52,10 @@ public class CustomerService {
             throw new RuntimeException("Account creation failed: " + e.getMessage(), e);
         }
     }
+    public void closeAccount(long customerId) throws EntityNotFoundException {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found with this id: " + customerId));
+        customer.setStatus(CustomerStatus.REJECTED);
+        customerRepository.save(customer);
+    }
 }

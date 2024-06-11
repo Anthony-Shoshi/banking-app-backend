@@ -20,7 +20,9 @@ public class LoginController {
 
     private final UserService userService;
 
+    @Autowired
     public LoginController(UserService userService) {
+
         this.userService = userService;
     }
 

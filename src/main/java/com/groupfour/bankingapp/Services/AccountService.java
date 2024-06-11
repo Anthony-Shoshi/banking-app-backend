@@ -4,24 +4,20 @@ import com.groupfour.bankingapp.Controllers.AccountController;
 import com.groupfour.bankingapp.Models.Account;
 import com.groupfour.bankingapp.Models.AccountType;
 import com.groupfour.bankingapp.Models.Customer;
-import com.groupfour.bankingapp.Models.CustomerStatus;
-import com.groupfour.bankingapp.Models.DTO.AccountsGetDTO;
-import com.groupfour.bankingapp.Models.DTO.ApproveSignupPutDTO;
+import com.groupfour.bankingapp.Models.DTO.*;
 import com.groupfour.bankingapp.Repository.AccountRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
 import java.util.Random;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 public class AccountService {
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
     public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
@@ -86,6 +82,7 @@ public class AccountService {
     }
 
 
+
    /* public Object getAccountDetails(Long userId) throws RuntimeException {
         return accountRepository.findAccountsByCustomerId(userId).stream()
                 .map(account -> new AccountsGetDTO(
@@ -101,6 +98,30 @@ public class AccountService {
                 )
                 .collect(Collectors.toList());
     }*/
+    public String getCurrentAccountIbanByCustomerName(String firstName, String lastName) {
+        String iban = accountRepository.findCurrentAccountIbanByCustomerName(firstName, lastName);
+        if (iban == null) {
+            throw new IllegalArgumentException("No current account found for the given customer name");
+        }
+        return iban;
+    }
+    @Transactional
+    public void updateAccountLimits(UpdateAccountLimitsDTO updateAccountLimitsDTO) {
+        Account account = accountRepository.findById(updateAccountLimitsDTO.getAccountId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid account ID"));
+
+        if (updateAccountLimitsDTO.getDailyLimit() != null) {
+            account.setDailyLimit(updateAccountLimitsDTO.getDailyLimit());
+        }
+
+        if (updateAccountLimitsDTO.getAbsoluteLimit() != null) {
+            account.setAbsoluteLimit(updateAccountLimitsDTO.getAbsoluteLimit());
+        }
+
+        accountRepository.save(account);
+    }
+
+
 
     public Object getAccountDetails(Long userId) throws AccountController.AccountNotFoundException {
         List<Account> accounts = accountRepository.findByCustomerId(userId);
@@ -125,4 +146,25 @@ public class AccountService {
         return accountDetails;
     }
 
+    public List<AccountsGetDTO> getAccountsByUserId(Long userId) {
+        List<Account> accounts = accountRepository.findByCustomerUserUserId(userId);
+        return accounts.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    private AccountsGetDTO convertToDto(Account account) {
+        return new AccountsGetDTO(
+                account.getAccountId(),
+                account.getCustomer().getCustomerId(),
+                account.getCustomer().getUser().getFirstName() + " " + account.getCustomer().getUser().getLastName(),
+                account.getIBAN(),
+                account.getBalance(),
+                account.getAccountType(),
+                account.getCustomer().getStatus(),
+                account.getAbsoluteLimit(),
+                account.getDailyLimit()
+        );
+    }
+
+
 }
+

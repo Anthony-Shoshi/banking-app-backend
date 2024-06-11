@@ -1,12 +1,12 @@
 Feature: Account Management
 
   Scenario: Employee retrieves all customer accounts
-    Given an employee is logged in with role EMPLOYEE
+    Given an employee is logged in with role EMPLOYEEE
     When the employee requests all customer accounts
     Then the system should return all accounts with status 200
 
   Scenario: Employee retrieves no customer accounts
-    Given an employee is logged in with role EMPLOYEE
+    Given an employee is logged in with role EMPLOYEEE
     When the employee requests all customer accounts
     Then the system should return an empty list with status 200
 

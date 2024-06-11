@@ -13,6 +13,16 @@ import java.util.Optional;
 public interface AccountRepository extends JpaRepository <Account, Long>{
     boolean existsByIBAN(String iban);
 
+    Account findByIBAN(String iban);
+
+
     @Query("SELECT a FROM Account a WHERE a.customer.user.userId = :userId")
     List<Account> findByCustomerId(@Param("userId") Long userId);
+    @Query("SELECT a.IBAN FROM Account a WHERE a.customer.user.firstName = :firstName AND a.customer.user.lastName = :lastName AND a.accountType = com.groupfour.bankingapp.Models.AccountType.CURRENT")
+    String findCurrentAccountIbanByCustomerName(@Param("firstName") String firstName, @Param("lastName") String lastName);
+
+  //  Account findByIBAN(String iban);
+
+    List<Account> findByCustomerUserUserId(Long userId);
+
 }

@@ -1,13 +1,14 @@
 package com.groupfour.bankingapp.Controllers;
 
 
-import com.groupfour.bankingapp.Models.Account;
 import com.groupfour.bankingapp.Models.AccountType;
 import com.groupfour.bankingapp.Models.CustomerStatus;
 import com.groupfour.bankingapp.Models.DTO.AccountsGetDTO;
+import com.groupfour.bankingapp.Models.DTO.UpdateAccountLimitsDTO;
 import com.groupfour.bankingapp.Security.JwtTokenProvider;
 import com.groupfour.bankingapp.Services.AccountService;
 import com.groupfour.bankingapp.Services.TransactionService;
+import com.groupfour.bankingapp.Services.UserService;
 import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -17,22 +18,21 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.util.NestedServletException;
-
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.http.RequestEntity.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.Collections;
+import java.util.Arrays;
+
 
 @WebMvcTest (AccountController.class)
 public class AccountControllerTest {
@@ -48,6 +48,9 @@ public class AccountControllerTest {
 
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
+
+    @MockBean
+    private UserService userService;
     @Test
     @WithMockUser(username = "admin", roles = {"EMPLOYEE"})
     void getAllAccountsShouldReturnAccounts() throws Exception {
@@ -118,4 +121,6 @@ public class AccountControllerTest {
                     .andExpect(status().isNotFound()); // Expecting 404 Not Found status if properly handled
         });
     }
+
+
 }
