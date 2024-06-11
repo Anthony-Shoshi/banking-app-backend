@@ -110,7 +110,7 @@ public class WebSecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "https://anthony-shoshi.github.io/banking-app-frontend"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "https://anthony-shoshi.github.io/banking-app-frontend", "https://anthony-shoshi.github.io"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);

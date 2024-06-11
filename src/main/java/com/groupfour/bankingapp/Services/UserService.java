@@ -1,6 +1,7 @@
 package com.groupfour.bankingapp.Services;
 
 //import javax.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import com.groupfour.bankingapp.Models.Customer;
@@ -23,11 +24,12 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
-    private CustomerRepository customerRepository;
-    private BCryptPasswordEncoder passwordEncoder;
-    private JwtTokenProvider jwtTokenProvider;
+    private final UserRepository userRepository;
+    private final CustomerRepository customerRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
 
+    @Autowired
     public UserService(UserRepository userRepository, CustomerRepository customerRepository, BCryptPasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
         this.customerRepository = customerRepository;
