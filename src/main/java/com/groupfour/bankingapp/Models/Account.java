@@ -1,12 +1,7 @@
 package com.groupfour.bankingapp.Models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,8 +10,8 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
-
+//@AllArgsConstructor
+@Table(name = "Account")
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +19,7 @@ public class Account {
 
     @ManyToOne
     @JsonIgnoreProperties({"accounts"})
-   // private User user;
+    private Customer customer;
 
     @Column(unique = true)
     private String IBAN;
@@ -35,5 +30,57 @@ public class Account {
     private Boolean isActive;
     private Double dailyLimit;
     private AccountStatus status;
+    private String currency;
 
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public String getIBAN() {
+        return IBAN;
+    }
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public Double getAbsoluteLimit() {
+        return absoluteLimit;
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public Double getDailyLimit() {
+        return dailyLimit;
+    }
+
+    public AccountStatus getStatus() {
+        return status;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public Account( Customer customer, String IBAN, Double balance, Double absoluteLimit, AccountType accountType, Boolean isActive, Double dailyLimit, AccountStatus status, String currency) {
+        this.customer = customer;
+        this.IBAN = IBAN;
+        this.balance = balance;
+        this.absoluteLimit = absoluteLimit;
+        this.accountType = accountType;
+        this.isActive = isActive;
+        this.dailyLimit = dailyLimit;
+        this.status = status;
+        this.currency = currency;
+    }
 }
